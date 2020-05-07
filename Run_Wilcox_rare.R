@@ -1,27 +1,3 @@
-#### Run Corncob
-
-library(corncob)
-library(phyloseq)
-
-#install corncob if its not installed.
-deps = c("corncob")
-for (dep in deps){
-  if (dep %in% installed.packages()[,"Package"] == FALSE){
-    if(dep=="corncob"){
-      devtools::install_github("bryandmartin/corncob")
-    }
-    else
-      if (!requireNamespace("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-
-    BiocManager::install("phyloseq")
-  }
-  library(dep, character.only = TRUE)
-}
-
-
-
-
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) <= 2) {
@@ -36,13 +12,11 @@ groupings <- read.table(args[2], sep="\t", row.names = 1, header=T, comment.char
 sample_num <- length(colnames(ASV_table))
 grouping_num <- length(rownames(groupings))
 
-#check if the same number of samples are being input.
 if(sample_num != grouping_num){
   message("The number of samples in the ASV table and the groupings table are unequal")
   message("Will remove any samples that are not found in either the ASV table or the groupings table")
 }
 
-#check if order of samples match up.
 if(identical(colnames(ASV_table), rownames(groupings))==T){
   message("Groupings and ASV table are in the same order")
 }else{
@@ -58,25 +32,13 @@ if(identical(colnames(ASV_table), rownames(groupings))==T){
   }
 }
 
-#run corncob
-#put data into phyloseq object.
+
 colnames(groupings)
 colnames(groupings)[1] <- "places"
 
-OTU <- phyloseq::otu_table(ASV_table, taxa_are_rows = T)
-sampledata <- phyloseq::sample_data(groupings, errorIfNULL = T)
-phylo <- phyloseq::merge_phyloseq(OTU, sampledata)
+#apply wilcox test to rarified table
+pvals <- apply(ASV_table, 1, function(x) wilcox.test(x ~ groupings[,1], exact=F)$p.value)
 
-my_formula <- as.formula(paste("~","places",sep=" ", collapse = ""))
-my_formula
-results <- corncob::differentialTest(formula= my_formula,
-                                     phi.formula = my_formula,
-                                     phi.formula_null = my_formula,
-                                     formula_null = ~ 1,
-                                     test="Wald", data=phylo,
-                                     boot=F,
-                                     fdr_cutoff = 0.05)
+write.table(pvals, file=args[[3]], sep="\t", col.names = NA, quote=F)
 
 
-results$p_fdr
-write.table(results$p_fdr, file=args[[3]], sep="\t", col.names = NA, quote=F)
