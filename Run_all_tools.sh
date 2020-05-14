@@ -45,10 +45,13 @@ Run_DeSeq2()
     Rscript Run_DESeq2.R $ASV_table_Path $Groupings_Path $out_file_deseq
 }
 
-Run_Ancom()
+Run_Ancom2()
 {
 
     echo "Running ANCOM"
+    mkdir $Output_Path/ANCOM_out
+    out_file_ancom=$Output_Path/Ancom_out/Ancom_res.tsv
+    Rscript Run_ANCOM.R $ASV_table_Path $Groupings_Path $out_file_ancom $PWD/Ancom2_Script/ancom_v2.1.R
 }
 
 
@@ -105,6 +108,49 @@ Run_Wilcoxin_CLR()
     
 }
 
+Run_Maaslin2_rare()
+{
+    echo "Running Maaslin2 with rarified table"
+    mkdir $Output_Path/Maaslin2_rare_out
+    out_file_maas_rare=$PWD/$Output_Path/Maaslin2_rare_out
+    Rscript Run_Maaslin2.R $Rar_ASV_table_PATH $Groupings_Path $out_file_maas_rare
+}
+
+Run_Maaslin2()
+{
+    echo "Running Maaslin2 on non-rarified table"
+    mkdir $Output_Path/Maaslin2_out
+    out_file_maas=$PWD/$Output_Path/Maaslin2_out
+    Rscript Run_Maaslin2.R $ASV_table_Path $Groupings_Path $out_file_maas
+}
+
+Run_metagenomeSeq()
+{
+
+    echo "Running metagenomeSeq using fitFeatureModel"
+    mkdir $Output_Path/metagenomeSeq_out
+    out_file_mgSeq=$Output_Path/metagenomeSeq_out/mgSeq_res.tsv
+    Rscript Run_metagenomeSeq.R $ASV_table_Path $Groupings_Path $out_file_mgSeq
+}
+
+Run_edgeR()
+{
+    echo "Running edgeR"
+    mkdir $Output_Path/edgeR_out
+    out_file_edgeR=$Output_Path/edgeR_out/edgeR_res.tsv
+    Rscript Run_edgeR.R $ASV_table_Path $Groupings_Path $out_file_edgeR
+    
+}
+
+Run_t_test_rare()
+
+{
+    echo "Running T test"
+    mkdir $Output_Path/t_test_rare_out
+    out_file_t_rare=$Output_Path/t_test_rare_out/t_test_res.tsv
+    Rscript Run_t_test_rare.R $Rar_ASV_table_PATH $Groupings_Path $out_file_t_rare
+    
+}
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -134,11 +180,16 @@ done
 #Aldex (:
 #Deseq2 (:
 #Lefse (:
-#Ancom 
+#Ancom2 (:
+#Ancom ... need a scipy script.
 #Corncob (:
-#Maaslin2 
+#Maaslin2 (:
 #Wilcoxin rarified (:
 #Wilcoxin CLR (:
+#edgeR (:
+#metagenomeSeq (:
+#t test 
+
 
 
 # Test code to verify command line processing
@@ -147,9 +198,15 @@ echo $ASV_table_Path
 echo $Groupings_Path
 echo $Output_Path
 
-#Run_ALDEX2
-#Run_DeSeq2
-#Run_Lefse		       	
-#Run_Corncob
-#Run_Wilcoxin_rare
+Run_ALDEX2
+Run_DeSeq2
+Run_Lefse		       	
+Run_Corncob
+Run_Wilcoxin_rare
 Run_Wilcoxin_CLR
+Run_Maaslin2_rare
+Run_Maaslin2
+Run_Ancom2
+Run_metagenomeSeq
+Run_edgeR
+Run_t_test_rare
