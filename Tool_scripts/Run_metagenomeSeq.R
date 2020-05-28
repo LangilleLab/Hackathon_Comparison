@@ -15,10 +15,18 @@ if (length(args) <= 2) {
   stop("At least three arguments must be supplied", call.=FALSE)
 }
 
+con <- file(args[1])
+file_1_line1 <- readLines(con,n=1)
+close(con)
 
-args <- commandArgs(trailingOnly = TRUE)
+if(grepl("Constructed from biom file", file_1_line1)){
+  ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}else{
+  ASV_table <- read.table(args[1], sep="\t", header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}
 
-ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, comment.char = "", quote="", check.names = F)
 groupings <- read.table(args[2], sep="\t", row.names = 1, header=T, comment.char = "", quote="", check.names = F)
 
 #number of samples
@@ -67,8 +75,9 @@ p
 
 test_obj_norm <- cumNorm(test_obj, p=p)
 
+fromula <- as.formula(paste(~1, colnames(groupings)[1], sep=" + "))
 pd <- pData(test_obj_norm)
-mod <- model.matrix(~1 + Facility, data=pd)
+mod <- model.matrix(fromula, data=pd)
 regres <- fitFeatureModel(test_obj_norm, mod)
 
 res_table <- MRfulltable(regres, number = length(rownames(ASV_table)))

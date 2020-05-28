@@ -9,7 +9,18 @@ if (length(args) <= 2) {
 }
 
 
-ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, comment.char = "", quote="", check.names = F)
+con <- file(args[1])
+file_1_line1 <- readLines(con,n=1)
+close(con)
+
+if(grepl("Constructed from biom file", file_1_line1)){
+  ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}else{
+  ASV_table <- read.table(args[1], sep="\t", header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}
+
 groupings <- read.table(args[2], sep="\t", row.names = 1, header=T, comment.char = "", quote="", check.names = F)
 
 #number of samples

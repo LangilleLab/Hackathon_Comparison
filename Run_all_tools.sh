@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# sysinfo_page - A script to produce a system information HTML file
-
-##### Constants
 
 RIGHT_NOW=$(date +"%x %r %Z")
 TIME_STAMP="Updated on $RIGHT_NOW by $USER"
@@ -14,6 +11,7 @@ help()
     echo "-A | --ASV_table -> A tsv file where each column represents a different ASV and each row represents a different samples"
     echo "-G | --Groupings -> A tsv file with two columns. One columns represents the sample names while the other column represents the group for that sample"
     echo "-O | --output_path -> the path to the directory that the output of each test should be placed into"
+    echo "-F | --Filt -> The precentage of samples required for a feature to be present in so that it will not be filtered out"
     echo "-h | --help -> The output of this command!"
 
 }
@@ -50,7 +48,7 @@ Run_Ancom2()
 
     echo "Running ANCOM"
     mkdir $Output_Path/ANCOM_out
-    out_file_ancom=$Output_Path/Ancom_out/Ancom_res.tsv
+    out_file_ancom=$Output_Path/ANCOM_out/Ancom_res.tsv
     Rscript Tool_scripts/Run_ANCOM.R $ASV_table_Path $Groupings_Path $out_file_ancom $PWD/Ancom2_Script/ancom_v2.1.R
 }
 
@@ -81,28 +79,23 @@ Run_Corncob()
 
     mkdir $Output_Path/Corncob_out
     out_file_corncob=$Output_Path/Corncob_out/Corncob_results.tsv
-    Rscript Tools_scripts/Run_Corncob.R $ASV_table_Path $Groupings_Path $out_file_corncob
+    Rscript Tool_scripts/Run_Corncob.R $ASV_table_Path $Groupings_Path $out_file_corncob
 
 }
 
 Run_Wilcoxin_rare()
 {
 
-    mkdir $Output_Path/Wilcoxin_rare_out
-    out_file_wil_rare=$Output_Path/Wilcoxin_rare_out/Wil_rare_results.tsv
+    mkdir $Output_Path/Wilcoxon_rare_out
+    out_file_wil_rare=$Output_Path/Wilcoxon_rare_out/Wil_rare_results.tsv
     Rscript Tool_scripts/Run_Wilcox_rare.R $Rar_ASV_table_PATH $Groupings_Path $out_file_wil_rare
 
 }
 
-Groupings_Path=
-ASV_table_Path=
-Output_Path=
-Rar_ASV_table_Path=
-
 Run_Wilcoxin_CLR()
 {
-    mkdir $Output_Path/Wilcoxin_CLR_out
-    out_file_wil_CLR=$Output_Path/Wilcoxin_CLR_out/Wil_CLR_results.tsv
+    mkdir $Output_Path/Wilcoxon_CLR_out
+    out_file_wil_CLR=$Output_Path/Wilcoxon_CLR_out/Wil_CLR_results.tsv
     Rscript Tool_scripts/Run_Wilcox_CLR.R $ASV_table_Path $Groupings_Path $out_file_wil_CLR
 
     
@@ -157,20 +150,37 @@ Filter_non_rare_table()
 
     echo "Ensuring samples are the same between tables"
     table_name="${ASV_table_Path##*/}"
+    rare_table_name="${Rar_ASV_table_PATH##*/}"
     mkdir $Output_Path/fixed_non_rare_tables/
-    out_file_new_tab=$Output_Path/fixed_non_rare_tables/$table_name
-    Rscript Tool_scripts/Filter_samples_of_non_rare_table.R $ASV_table_Path $Rar_ASV_table_PATH $PWD/$out_file_new_tab
-    ### check if it made a new table and if so update ASV_table_Path
-    if [ -f "$out_file_new_tab" ]; then
-	ASV_table_Path=$out_file_new_tab
-	sed -i "1i#filtered table" $ASV_table_Path
+    mkdir $Output_Path/fixed_rare_tables/
+    out_file_new_tab_ASV=$Output_Path/fixed_non_rare_tables/$table_name
+    out_file_new_tab_rar_ASV=$Output_Path/fixed_rare_tables/$rare_table_name
+	## set up filtering code
+    if [ $Filt_level != 0 ]; then
+	## script that both filters ASVs at filter level and then also at the filter level presence
+	Rscript Tool_scripts/Filter_samples_and_features.R $ASV_table_Path $Rar_ASV_table_PATH $Filt_level $out_file_new_tab_ASV $out_file_new_tab_rar_ASV
+	ASV_table_Path=$out_file_new_tab_ASV
+	Rar_ASV_table_PATH=$out_file_new_tab_rar_ASV
     else
-	echo "filtering not required"
+	### If filtering is not required we run the script that doesn't use filtering...
+	Rscript Tool_scripts/Filter_samples_of_non_rare_table.R $ASV_table_Path $Rar_ASV_table_PATH $out_file_new_tab_ASV
+    ### check if it made a new table and if so update ASV_table_Path
+	if [ -f "$out_file_new_tab" ]; then
+	    ASV_table_Path=$out_file_new_tab_ASV
+	else
+	    echo "Sample filtering not required"
+	fi
     fi
+    
     
     
 }
 
+Groupings_Path=
+ASV_table_Path=
+Output_Path=
+Rar_ASV_table_Path=
+Filt_level=0
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -183,6 +193,9 @@ while [ "$1" != "" ]; do
         -G | --Groupings ) shift
 	    Groupings_Path=$1
                                 ;;
+	-F | --Filt ) 	shift
+			Filt_level=$1
+				;;
         -h | --help )           usage
                                 exit
                                 ;;
@@ -214,20 +227,70 @@ done
 
 # Test code to verify command line processing
 
-echo $ASV_table_Path
-echo $Groupings_Path
-echo $Output_Path
+time_file=$Output_Path/time_file.txt
+touch $time_file
 
+current=$SECONDS
 Filter_non_rare_table
+duration=$(( SECONDS - current))
+echo "Filtering took "$duration" seconds" >> $time_file
+
+current=$SECONDS
 Run_ALDEX2
-#Run_DeSeq2
-#Run_Lefse		       	
-#Run_Corncob
-#Run_Wilcoxin_rare
-#Run_Wilcoxin_CLR
-#Run_Maaslin2_rare
-#Run_Maaslin2
-#Run_Ancom2
-#Run_metagenomeSeq
-#Run_edgeR
-#Run_t_test_rare
+duration=$(( SECONDS - current))
+echo "Aldex2 took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_DeSeq2
+duration=$(( SECONDS - current))
+echo "Deseq2 took " $duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Lefse		       	
+duration=$(( SECONDS - current))
+echo "Lefse took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Corncob
+duration=$(( SECONDS - current))
+echo "Corncob took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Wilcoxin_rare
+duration=$(( SECONDS - current))
+echo "Wilcoxon rare took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Wilcoxin_CLR
+duration=$(( SECONDS - current))
+echo "Wilcoxon CLR took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Maaslin2_rare
+duration=$(( SECONDS - current))
+echo "Maaslin2 rare took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Maaslin2
+duration=$(( SECONDS - current))
+echo "Maaslin2 took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_Ancom2
+duration=$(( SECONDS - current))
+echo "Ancom2 took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_metagenomeSeq
+duration=$(( SECONDS - current))
+echo "metagenomeSeq took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_edgeR
+duration=$(( SECONDS - current))
+echo "edgeR took "$duration" seconds" >> $time_file
+
+current=$SECONDS
+Run_t_test_rare
+duration=$(( SECONDS - current))
+echo "t test rare took "$duration" seconds" >> $time_file

@@ -18,7 +18,18 @@ if (length(args) <= 3) {
 
 source(args[[4]])
 
-ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, comment.char = "", quote="", check.names = F)
+con <- file(args[1])
+file_1_line1 <- readLines(con,n=1)
+close(con)
+
+if(grepl("Constructed from biom file", file_1_line1)){
+  ASV_table <- read.table(args[1], sep="\t", skip=1, header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}else{
+  ASV_table <- read.table(args[1], sep="\t", header=T, row.names = 1, 
+                          comment.char = "", quote="", check.names = F)
+}
+
 groupings <- read.table(args[2], sep="\t", row.names = 1, header=T, comment.char = "", quote="", check.names = F)
 
 #number of samples
@@ -63,4 +74,6 @@ adj_formula=NULL
 rand_formula=NULL
 res <- ANCOM(feature_table = feature_table, meta_data = metadata, struc_zero = struc_zero, main_var = main_var, p_adj_method = p_adj_method,
              alpha=alpha, adj_formula = adj_formula, rand_formula = rand_formula)
-write.table(res, file=args[3], quote=FALSE, sep="\t", col.names = NA)
+
+
+write.table(res$out, file=args[3], quote=FALSE, sep="\t", col.names = NA)
