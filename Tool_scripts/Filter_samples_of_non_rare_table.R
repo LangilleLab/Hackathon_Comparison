@@ -20,6 +20,10 @@ if(grepl("Constructed from biom file", file_1_line1)){
   ASV_table_1 <- read.table(args[1], sep="\t", header=T, row.names = 1, 
                             comment.char = "", quote="", check.names = F)
 }
+if("taxonomy" %in% colnames(ASV_table_1)){
+  ASV_table_1 <- subset(ASV_table_1, select=-c(taxonomy))
+}
+
 
 con2 <- file(args[[2]])
 file_2_line1 <- readLines(con2, n=1)
@@ -31,6 +35,10 @@ if(grepl("Constructed from biom file", file_2_line1)){
 }else{
   ASV_table_2 <- read.table(args[2], sep="\t", header=T, row.names = 1, 
                             comment.char = "", quote="", check.names = F)
+}
+
+if("taxonomy" %in% colnames(ASV_table_2)){
+  ASV_table_2 <- subset(ASV_table_2, select=-c(taxonomy))
 }
 
 
@@ -48,6 +56,7 @@ if(!identical(colnames(ASV_table_1), colnames(ASV_table_2))){
   }
 }else{
   "Samples  between tables agree, no filtering required"
+  write.table(ASV_table_1, sep="\t", quote=F, file=args[[3]])
 }
 ### filer ASV_table_1 to be the same
 

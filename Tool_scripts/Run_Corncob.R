@@ -88,5 +88,4 @@ results <- corncob::differentialTest(formula= my_formula,
                                      fdr_cutoff = 0.05)
 
 
-results$p_fdr
 write.table(results$p_fdr, file=args[[3]], sep="\t", col.names = NA, quote=F)
