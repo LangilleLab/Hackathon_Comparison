@@ -1,0 +1,712 @@
+---
+title: "Hackathon basic summary"
+author: "Gavin Douglas"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    code_folding: hide
+    theme: cerulean
+    toc: true
+    toc_float: true
+---
+
+```{r setup, message=FALSE}
+library(ffpe)
+library(ape)
+library(circlize)
+library(ComplexHeatmap)
+library(cowplot)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(qiime2R)
+library(reshape2)
+library(pheatmap)
+library(tidyverse)
+
+theme_set(theme_classic())
+
+opts_knit$set(root.dir = '/home/jacob/projects/Hackathon/Studies/')
+setwd("/home/jacob/projects/Hackathon/Studies/")
+```
+
+```{r define_functions}
+read_table_and_check_line_count <- function(filepath, ...) {
+  # Function to read in table and to check whether the row count equals the expected line count of the file.
+  
+  exp_count <- as.numeric(sub(pattern = " .*$", "", system(command = paste("wc -l", filepath, sep=" "), intern = TRUE)))
+  
+  df <- read.table(filepath, ...)
+  
+  if(length(grep("^V", colnames(df))) != ncol(df)) {
+    exp_count <- exp_count - 1
+  }
+  
+  if(exp_count != nrow(df)) {
+    stop(paste("Expected ", as.character(exp_count), " lines, but found ", as.character(nrow(df))))
+  } else {
+    return(df) 
+  }
+}
+
+
+read_hackathon_results <- function(study,
+                                   results_folder="Fix_Results_0.1") {
+  
+  da_tool_filepath <- list()
+  da_tool_filepath[["aldex2"]] <- paste(study, results_folder, "Aldex_out/Aldex_res.tsv", sep = "/")
+  da_tool_filepath[["ancom"]] <- paste(study, results_folder, "ANCOM_out/Ancom_res.tsv", sep = "/")
+  da_tool_filepath[["corncob"]] <- paste(study, results_folder, "Corncob_out/Corncob_results.tsv", sep = "/")
+  da_tool_filepath[["deseq2"]] <- paste(study, results_folder, "Deseq2_out/Deseq2_results.tsv", sep = "/")
+  da_tool_filepath[["edger"]] <- paste(study, results_folder, "edgeR_out/edgeR_res.tsv", sep = "/")
+  da_tool_filepath[["lefse"]] <- paste(study, results_folder, "Lefse_out/Lefse_results.tsv", sep = "/")
+  da_tool_filepath[["maaslin2"]] <- paste(study, results_folder, "Maaslin2_out/all_results.tsv", sep = "/")
+  da_tool_filepath[["maaslin2rare"]] <- paste(study, results_folder, "Maaslin2_rare_out/all_results.tsv", sep = "/")
+  da_tool_filepath[["metagenomeSeq"]] <- paste(study, results_folder, "metagenomeSeq_out/mgSeq_res.tsv", sep = "/")
+  da_tool_filepath[["ttestrare"]] <- paste(study, results_folder, "t_test_rare_out/t_test_res.tsv", sep = "/")
+  da_tool_filepath[["wilcoxonclr"]] <- paste(study, results_folder, "Wilcoxon_CLR_out/Wil_CLR_results.tsv", sep = "/")
+  da_tool_filepath[["wilcoxonrare"]] <- paste(study, results_folder, "Wilcoxon_rare_out/Wil_rare_results.tsv", sep = "/")
+  da_tool_filepath[["limma_voom_TMM"]] <- paste(study, results_folder, "Limma_voom_TMM/limma_voom_tmm_res.tsv", sep="/")
+  
+  adjP_colname <- list()
+  adjP_colname[["aldex2"]] <- "wi.eBH"
+  adjP_colname[["ancom"]] <- "detected_0.9"
+  adjP_colname[["corncob"]] <- "x"
+  adjP_colname[["deseq2"]] <- "padj"
+  adjP_colname[["edger"]] <- "FDR"
+  adjP_colname[["lefse"]] <- "V5"
+  adjP_colname[["maaslin2"]] <- "qval"
+  adjP_colname[["maaslin2rare"]] <- "qval"
+  adjP_colname[["metagenomeSeq"]] <- "adjPvalues"
+  adjP_colname[["ttestrare"]] <- "x"
+  adjP_colname[["wilcoxonclr"]] <- "x"
+  adjP_colname[["wilcoxonrare"]] <- "x"
+  adjP_colname[["limma_voom_TMM"]] <- "adj.P.Val"
+  
+  # Read in results files and run sanity check that results files have expected number of lines
+  da_tool_results <- list()
+  
+  missing_tools <- c()
+  
+  for(da_tool in names(da_tool_filepath)) {
+    
+    if(! (file.exists(da_tool_filepath[[da_tool]]))) {
+       missing_tools <- c(missing_tools, da_tool)
+       message(paste("File ", da_tool_filepath[[da_tool]], " not found. Skipping.", sep=""))
+       next
+    }
+    
+    if(da_tool %in% c("ancom", "maaslin2", "maaslin2rare")) {
+      da_tool_results[[da_tool]] <- read_table_and_check_line_count(da_tool_filepath[[da_tool]], sep="\t", row.names=2, header=TRUE)
+    } else if(da_tool == "lefse") {
+      da_tool_results[[da_tool]] <- read_table_and_check_line_count(da_tool_filepath[[da_tool]], sep="\t", row.names=1, header=FALSE, stringsAsFactors=FALSE)
+      rownames(da_tool_results[[da_tool]]) <- gsub("^f_", "", rownames(da_tool_results[[da_tool]]))
+    } else {
+      da_tool_results[[da_tool]] <- read_table_and_check_line_count(da_tool_filepath[[da_tool]], sep="\t", row.names=1, header=TRUE)
+    }
+  }
+  
+  # Combine corrected P-values into same table.
+  all_rows <- c()
+  
+   for(da_tool in names(adjP_colname)) {
+     all_rows <- c(all_rows, rownames(da_tool_results[[da_tool]]))
+   }
+  all_rows <- all_rows[-which(duplicated(all_rows))]
+
+  adjP_table <- data.frame(matrix(NA, ncol=length(names(da_tool_results)), nrow=length(all_rows)))
+  colnames(adjP_table) <- names(da_tool_results)
+  rownames(adjP_table) <- all_rows
+  
+  for(da_tool in colnames(adjP_table)) {
+ 
+    if(da_tool %in% missing_tools) {
+       next
+    }
+    
+    if(da_tool == "lefse") {
+     
+        tmp_lefse <- da_tool_results[[da_tool]][, adjP_colname[[da_tool]]]
+        tmp_lefse[which(tmp_lefse == "-")] <- NA
+        adjP_table[rownames(da_tool_results[[da_tool]]), da_tool] <- as.numeric(tmp_lefse)
+
+        lefse_tested_asvs <- rownames(da_tool_results$wilcoxonrare)[which(! is.na(da_tool_results$wilcoxonrare))]
+        lefse_NA_asvs <- rownames(da_tool_results$lefse)[which(is.na(tmp_lefse))]
+  
+        adjP_table[lefse_NA_asvs[which(lefse_NA_asvs %in% lefse_tested_asvs)], da_tool] <- 1
+        
+    } else if(da_tool == "ancom") {
+      
+      sig_ancom_hits <- which(da_tool_results[[da_tool]][, adjP_colname[[da_tool]]])
+      ancom_results <- rep(1, length(da_tool_results[[da_tool]][, adjP_colname[[da_tool]]]))
+      ancom_results[sig_ancom_hits] <- 0
+      adjP_table[rownames(da_tool_results[[da_tool]]), da_tool] <- ancom_results
+    
+    } else if(da_tool %in% c("wilcoxonclr", "wilcoxonrare", "ttestrare")) {
+      
+      # Need to perform FDR-correction on these outputs.
+      adjP_table[rownames(da_tool_results[[da_tool]]), da_tool] <- p.adjust(da_tool_results[[da_tool]][, adjP_colname[[da_tool]]], "fdr")
+    
+    } else {
+      adjP_table[rownames(da_tool_results[[da_tool]]), da_tool] <- da_tool_results[[da_tool]][, adjP_colname[[da_tool]]]
+    }
+  }
+
+  return(list(raw_tables=da_tool_results,
+              adjP_table=adjP_table))
+  
+}
+```
+
+# Introduction
+
+I ran basic analyses to run some sanity checks on the results of the processing pipeline and to re-generate the basic results across all of the tested datasets.
+
+# Read in all results
+
+Currently I'm reading all of the results into a single giant list in R, which can then be saved as an RDS file for future reference. You can look at the below code and the `read_hackathon_results` function if you're interested.
+
+Note that the study **ob_zupancic** was excluded, I think because all OTUs were excluded after the filtering step.
+
+
+```{r read_data, cache=TRUE}
+hackathon_study_ids <- c("ArcticFireSoils",
+                         "ArcticFreshwaters",
+                         "ArcticTransects",
+                         "art_scher",
+                         "asd_son",
+                         "BISCUIT",
+                         "Blueberry",
+                         "cdi_schubert",
+                         "cdi_vincent",
+                         "Chemerin",
+                         "crc_baxter",
+                         "crc_zeller",
+                         "edd_singh",
+                         "Exercise",
+                         "glass_plastic_oberbeckmann",
+                         "GWMC_ASIA_NA",
+                         "GWMC_HOT_COLD",
+                         "hiv_dinh",
+                         "hiv_lozupone",
+                         "hiv_noguerajulian",
+                         "ibd_gevers",
+                         "ibd_papa",
+                         "Ji_WTP_DS",
+                         "MALL",
+                         "ob_goodrich",
+                         "ob_ross",
+                         "ob_turnbaugh",
+                         "ob_zhu",
+                         ###"ob_zupancic",
+                         "Office",
+                         "par_scheperjans",
+                         "sed_plastic_hoellein",
+                         "sed_plastic_rosato",
+                         "seston_plastic_mccormick",
+                         "sw_plastic_frere",
+                         "sw_sed_detender",
+                          "t1d_alkanani",
+                         "t1d_mejialeon",
+                         "wood_plastic_kesy")
+
+filt_results <- lapply(hackathon_study_ids, read_hackathon_results)
+names(filt_results) <- hackathon_study_ids
+
+
+unfilt_results <- lapply(hackathon_study_ids, read_hackathon_results, results_folder = "No_filt_Results")
+names(unfilt_results) <- hackathon_study_ids
+```
+
+```{r read_test_asvs}
+### Get sets of ASVS that were tested for each rarified/unrarified version of dataset.
+
+filt_study_asvs <- list()
+filt_study_asvs[["rare"]] <- list()
+filt_study_asvs[["nonrare"]] <- list()
+
+for (study in hackathon_study_ids) {
+
+  filt_study_asvs[["nonrare"]][[study]] <- rownames(read.table(paste(study, "/Fix_Results_0.1/fixed_non_rare_tables/", study, "_ASVs_table.tsv", sep=""), header=TRUE, sep="\t", row.names=1, check.names = FALSE))
+  
+  filt_study_asvs[["rare"]][[study]] <- rownames(read.table(paste(study, "/Fix_Results_0.1/fixed_rare_tables/", study, "_ASVs_table.tsv", sep=""), header=TRUE, sep="\t", row.names=1, check.names = FALSE))
+}
+
+
+unfilt_study_asvs <- list()
+unfilt_study_asvs[["rare"]] <- list()
+unfilt_study_asvs[["nonrare"]] <- list()
+
+for (study in hackathon_study_ids) {
+
+  unfilt_study_asvs[["nonrare"]][[study]] <- rownames(read.table(paste(study, "/No_filt_Results/fixed_non_rare_tables/", study, "_ASVs_table.tsv", sep=""), header=TRUE, sep="\t", row.names=1, check.names = FALSE))
+  
+  unfilt_study_asvs[["rare"]][[study]] <- rownames(read.table(paste(study, "/", study, "_ASVs_table_rare.tsv", sep=""), header=TRUE, sep="\t", row.names=1, check.names = FALSE))
+}
+```
+
+
+# Number of significant ASVs
+
+```{r parse_count_table_filt}
+sig_counts <- data.frame(matrix(NA,
+                                nrow=length(names(filt_results)),
+                                ncol=ncol(filt_results[[1]]$adjP_table) + 1))
+rownames(sig_counts) <- names(filt_results)
+colnames(sig_counts) <- c("dataset", colnames(filt_results[[1]]$adjP_table))
+sig_counts$dataset <- rownames(sig_counts)
+
+filt_sig_counts <- sig_counts
+filt_sig_percent <- sig_counts
+
+unfilt_sig_counts <- sig_counts
+unfilt_sig_percent <- sig_counts
+
+for(study in rownames(filt_sig_counts)) {
+  for(tool_name in colnames(filt_sig_counts)) {
+    
+    if(tool_name == "dataset") { next }
+
+    if(! tool_name %in% colnames(filt_results[[study]]$adjP_table)) {
+      filt_sig_counts[study, tool_name] <- NA
+      filt_sig_percent[study, tool_name] <- NA
+      next
+    }
+    
+    filt_sig_counts[study, tool_name] <- length(which(filt_results[[study]]$adjP_table[, tool_name] < 0.05))
+    
+    # For rarified pipelines get total # ASVs from wilcoxonrare and for non-rarified get it from wilcoxonclr table.
+    if(tool_name %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")) {
+      filt_sig_percent[study, tool_name] <- (length(which(filt_results[[study]]$adjP_table[, tool_name] < 0.05)) / length(filt_study_asvs[["rare"]][[study]])) * 100
+    } else {
+      filt_sig_percent[study, tool_name] <- (length(which(filt_results[[study]]$adjP_table[, tool_name] < 0.05)) / length(filt_study_asvs[["nonrare"]][[study]])) * 100
+    }
+  }
+}
+
+
+for(study in rownames(unfilt_sig_counts)) {
+  for(tool_name in colnames(unfilt_sig_counts)) {
+    
+    if(tool_name == "dataset") { next }
+
+    if(! tool_name %in% colnames(unfilt_results[[study]]$adjP_table)) {
+      unfilt_sig_counts[study, tool_name] <- NA
+      unfilt_sig_percent[study, tool_name] <- NA
+      next
+    }
+    
+    unfilt_sig_counts[study, tool_name] <- length(which(unfilt_results[[study]]$adjP_table[, tool_name] < 0.05))
+    
+    # For rarified pipelines get total # ASVs from wilcoxonrare and for non-rarified get it from wilcoxonclr table.
+    if(tool_name %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")) {
+      unfilt_sig_percent[study, tool_name] <- (length(which(unfilt_results[[study]]$adjP_table[, tool_name] < 0.05)) / length(unfilt_study_asvs[["rare"]][[study]])) * 100
+    } else {
+      unfilt_sig_percent[study, tool_name] <- (length(which(unfilt_results[[study]]$adjP_table[, tool_name] < 0.05)) / length(unfilt_study_asvs[["nonrare"]][[study]])) * 100
+    }
+  }
+}
+```
+
+## Raw count table {.tabset}
+
+The below tables show the total number of significant ASVs identified by each tool for each dataset. The grey column headers indicate that the table was rarified before running the tool.
+
+### Filtered data
+
+```{r plot_count_table_filt}
+filt_sig_counts %>%
+kable(align = 'c', row.names = FALSE, digits=2) %>%
+  kable_styling() %>%
+  # Colour column header light grey if corresponds to rarified data
+  column_spec(column = which(colnames(filt_sig_counts) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "grey", include_thead = TRUE, color="white") %>%
+  column_spec(column = which(! colnames(filt_sig_counts) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "cornflowerblue", include_thead = TRUE, color="black") %>%
+  row_spec(row = 1:nrow(filt_sig_counts),
+           bold = TRUE,
+           color="black",
+           background = "white") %>% 
+   scroll_box(width = "1000px", height = "400px")
+```
+
+### Unfiltered data
+```{r plot_count_table_unfilt}
+unfilt_sig_counts %>%
+kable(align = 'c', row.names = FALSE, digits=2) %>%
+  kable_styling() %>%
+  # Colour column header light grey if corresponds to rarified data
+  column_spec(column = which(colnames(unfilt_sig_counts) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "grey", include_thead = TRUE, color="white") %>%
+  column_spec(column = which(! colnames(unfilt_sig_counts) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "cornflowerblue", include_thead = TRUE, color="black") %>%
+  row_spec(row = 1:nrow(unfilt_sig_counts),
+           bold = TRUE,
+           color="black",
+           background = "white") %>% 
+   scroll_box(width = "1000px", height = "400px")
+```
+
+## Percentage tables {.tabset}
+
+And the same tables as above, but representing the percent of the total number of ASVs that are significant per dataset.
+
+### Filtered data
+
+```{r plot_percent_table_filt}
+filt_sig_percent %>%
+kable(align = 'c', row.names = FALSE, digits=2) %>%
+  kable_styling() %>%
+  # Colour column header light grey if corresponds to rarified data
+  column_spec(column = which(colnames(filt_sig_percent) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "grey", include_thead = TRUE, color="white") %>%
+  column_spec(column = which(! colnames(filt_sig_percent) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "cornflowerblue", include_thead = TRUE, color="black") %>%
+  row_spec(row = 1:nrow(filt_sig_percent),
+           bold = TRUE,
+           color="black",
+           background = "white") %>% 
+   scroll_box(width = "1000px", height = "400px")
+```
+
+### Unfiltered data
+
+```{r plot_percent_table_unfilt}
+unfilt_sig_percent %>%
+kable(align = 'c', row.names = FALSE, digits=2) %>%
+  kable_styling() %>%
+  # Colour column header light grey if corresponds to rarified data
+  column_spec(column = which(colnames(unfilt_sig_percent) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "grey", include_thead = TRUE, color="white") %>%
+  column_spec(column = which(! colnames(unfilt_sig_percent) %in% c("lefse", "maaslin2rare", "ttestrare", "wilcoxonrare")),
+              background = "cornflowerblue", include_thead = TRUE, color="black") %>%
+  row_spec(row = 1:nrow(unfilt_sig_percent),
+           bold = TRUE,
+           color="black",
+           background = "white") %>% 
+   scroll_box(width = "1000px", height = "400px")
+```
+
+
+## Mean percent across all datasets
+
+Across all filtered datasets:
+
+```{r print_mean_per_filt}
+print(sort(colSums(filt_sig_percent[, -1], na.rm = TRUE) / (colSums(! is.na(filt_sig_percent[, -1])))))
+```
+
+Across all unfiltered datasets:
+
+```{r print_mean_per_unfilt}
+print(sort(colSums(unfilt_sig_percent[, -1], na.rm = TRUE) / (colSums(! is.na(unfilt_sig_percent[, -1])))))
+```
+
+
+## Count table heatmaps {.tabset}
+
+The above tables are somewhat useful, but I think for the manuscript we might want to show the data as a heatmap of the data (colours indicate standardized values based on scaling and centering % sig. hits by dataset), with the counts included too as below. Clustering was complete hierarchical clustering based on euclidean distances of the standardized data.
+
+
+### Filtered dataset
+
+```{r count_heatmap_filt, fig.height=6, fig.width=15}
+
+filt_sig_percent_scaled <- data.frame(scale(t(filt_sig_percent[, -1]), center = TRUE, scale = TRUE))
+
+hackathon_metadata <- read.table("/home/jacob/GitHub_Repos/Hackathon_testing/Analysis_Scripts/Metadata/2020_06_18_Datasets_Hackathon.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, quote="")
+rownames(hackathon_metadata) <- hackathon_metadata$Dataset.Name
+
+## getting sample sizes from metadata sheet.... I'm not sure if these match exactly with the tables... we should double check this...
+
+
+hackathon_metadata$log_N <- log(hackathon_metadata$Sample.Size)
+
+aitchison_adonis <- readRDS(file = "/home/gavin/gavin_backup/misc/hackathon/aitchison_adonis_no_ob_zupancic.rds")
+
+hackathon_metadata$R.squared <- NA
+
+for(dataset in names(aitchison_adonis)) {
+  hackathon_metadata[dataset, "R.squared"] <- aitchison_adonis[[dataset]]$R2[1]
+}
+
+hackathon_metadata$log_R.squared <- log(hackathon_metadata$R.squared)
+
+pheatmap(filt_sig_percent_scaled,
+         clustering_method = "complete",
+         legend=TRUE,
+         display_numbers=t(filt_sig_counts[, -1]),
+         annotation_col=hackathon_metadata[, c("log_N", "log_R.squared"), drop=FALSE])
+```
+
+### Unfiltered dataset
+
+```{r count_heatmap_unfilt, fig.height=6, fig.width=15}
+
+unfilt_sig_percent_scaled <- data.frame(scale(t(unfilt_sig_percent[, -1]), center = TRUE, scale = TRUE))
+
+hackathon_metadata <- read.table("/home/jacob/GitHub_Repos/Hackathon_testing/Analysis_Scripts/Metadata/2020_06_18_Datasets_Hackathon.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, quote="")
+rownames(hackathon_metadata) <- hackathon_metadata$Dataset.Name
+
+hackathon_metadata$log_N <- log(hackathon_metadata$Sample.Size)
+
+aitchison_adonis <- readRDS(file = "/home/gavin/gavin_backup/misc/hackathon/aitchison_adonis_no_ob_zupancic.rds")
+
+hackathon_metadata$R.squared <- NA
+
+for(dataset in names(aitchison_adonis)) {
+  hackathon_metadata[dataset, "R.squared"] <- aitchison_adonis[[dataset]]$R2[1]
+}
+
+hackathon_metadata$log_R.squared <- log(hackathon_metadata$R.squared)
+
+pheatmap(unfilt_sig_percent_scaled,
+         clustering_method = "complete",
+         legend=TRUE,
+         display_numbers=t(unfilt_sig_counts[, -1]),
+         annotation_col=hackathon_metadata[, c("log_N", "log_R.squared"), drop=FALSE])
+```
+
+
+
+## Differences with previous result files {.tabset}
+
+## Original counts
+
+This was Table 1 in Jocelyn's report:
+![](/home/gavin/gavin_backup/misc/hackathon/original_jocelyn_sig_count_table.png)
+
+## Filtered counts (subset)
+```{r recreate_orig_table_filt}
+
+origtools <- c("corncob", "aldex2", "maaslin2", "ancom", "lefse", "deseq2", "wilcoxonclr", "wilcoxonrare")
+origstudies <- c("Chemerin", "BISCUIT", "Blueberry", "MALL", "Exercise")
+
+pheatmap(scale(data.frame(t(filt_sig_counts[, -1]))[origtools, origstudies], center = TRUE, scale=TRUE),
+         cluster_rows = FALSE,
+         cluster_cols = FALSE,
+         legend=TRUE,
+         display_numbers=data.frame(t(filt_sig_counts[, -1]))[origtools, origstudies])
+```
+
+
+### Unfiltered counts (subset)
+```{r recreate_orig_table_unfilt}
+
+origtools <- c("corncob", "aldex2", "maaslin2", "ancom", "lefse", "deseq2", "wilcoxonclr", "wilcoxonrare")
+origstudies <- c("Chemerin", "BISCUIT", "Blueberry", "MALL", "Exercise")
+
+pheatmap(scale(data.frame(t(unfilt_sig_counts[, -1]))[origtools, origstudies], center = TRUE, scale=TRUE),
+         cluster_rows = FALSE,
+         cluster_cols = FALSE,
+         legend=TRUE,
+         display_numbers=data.frame(t(unfilt_sig_counts[, -1]))[origtools, origstudies])
+```
+
+
+
+# Summarizing variation in # sig. hits
+
+## CV vs mean {.tabset}
+
+Because we now have many more validation datasets we can do some actual statistics! I thought the below analysis comparing the mean percentage of significant ASVs and the coefficient of variation (cv) across datasets for that tool might be a sensible way to compare how the tools differ. I'm not so sure it's telling us anything useful, but worth considering what analysis could be done along these lines!
+
+CV = (sd / mean) * 100
+
+### Filtered data
+
+```{r tool_metrics_filt}
+tool_percent_means <- colSums(filt_sig_percent[, -1]) / nrow(filt_sig_percent)
+tool_perecent_sd <- apply(filt_sig_percent[, -1], 2, sd)
+tool_perecent_cv <- (tool_perecent_sd / tool_percent_means) * 100
+
+plot(tool_percent_means, tool_perecent_cv, col="white", xlim=c(0, 40), ylim=c(0, 250))
+text(tool_percent_means, tool_perecent_cv, names(tool_percent_means))
+```
+
+
+### Unfiltered data
+
+```{r tool_metrics_unfilt}
+tool_percent_means <- colSums(unfilt_sig_percent[, -1]) / nrow(unfilt_sig_percent)
+tool_perecent_sd <- apply(unfilt_sig_percent[, -1], 2, sd)
+tool_perecent_cv <- (tool_perecent_sd / tool_percent_means) * 100
+
+plot(tool_percent_means, tool_perecent_cv, col="white", xlim=c(0, 40), ylim=c(0, 250))
+text(tool_percent_means, tool_perecent_cv, names(tool_percent_means))
+```
+
+## Spearman correlation w N and R-squared {.tabset}
+
+### Filtered data
+
+```{r meta_cor_filt}
+tool_names <- colnames(filt_sig_percent)
+tool_names <- tool_names[-which(tool_names == "dataset")]
+cor_df <- data.frame(matrix(NA, nrow=length(tool_names), ncol=4))
+colnames(cor_df) <- c("Tool", "Sample.Size", "minor_class_percent", "R.squared")
+rownames(cor_df) <- tool_names
+
+cor_df$Tool <- rownames(cor_df)
+
+hackathon_metadata$minor_class_percent <- (hackathon_metadata$Minor.Group.Size / hackathon_metadata$Sample.Size) * 100
+
+for(tool_name in tool_names) {
+  
+  for(comparison in colnames(cor_df)[-1]) {
+    cor_df[tool_name, comparison] <- round(cor.test(hackathon_metadata[rownames(filt_sig_percent), comparison],
+                                                    filt_sig_percent[, tool_name])$estimate ** 2, 3)
+  }
+}
+
+
+cor_df %>%
+  mutate_if(is.numeric, function(x) {
+    cell_spec(x, bold = TRUE, background="light grey",
+              color = spec_color(x, option="D", end=max(x) * 0.9))
+  }) %>%
+kable(escape=FALSE, align = 'c', digits=2, format='html') %>%
+  kable_styling(c("striped", "condensed"), full_width = FALSE) %>%
+   scroll_box(width = "1000px", height = "600px")
+```
+
+### Unfiltered data
+
+```{r meta_cor_unfilt}
+tool_names <- colnames(unfilt_sig_percent)
+tool_names <- tool_names[-which(tool_names == "dataset")]
+cor_df <- data.frame(matrix(NA, nrow=length(tool_names), ncol=4))
+colnames(cor_df) <- c("Tool", "Sample.Size", "minor_class_percent", "R.squared")
+rownames(cor_df) <- tool_names
+
+cor_df$Tool <- rownames(cor_df)
+
+hackathon_metadata$minor_class_percent <- (hackathon_metadata$Minor.Group.Size / hackathon_metadata$Sample.Size) * 100
+
+for(tool_name in tool_names) {
+  
+  for(comparison in colnames(cor_df)[-1]) {
+    cor_df[tool_name, comparison] <- round(cor.test(hackathon_metadata[rownames(unfilt_sig_percent), comparison],
+                                                    unfilt_sig_percent[, tool_name])$estimate ** 2, 3)
+  }
+}
+
+
+cor_df %>%
+  mutate_if(is.numeric, function(x) {
+    cell_spec(x, bold = TRUE, background="light grey",
+              color = spec_color(x, option="D", end=max(x) * 0.9))
+  }) %>%
+kable(escape=FALSE, align = 'c', digits=2, format='html') %>%
+  kable_styling(c("striped", "condensed"), full_width = FALSE) %>%
+   scroll_box(width = "1000px", height = "600px")
+```
+
+# Heatmap of overlapping sig. hits {.tabset}
+
+Below are the heatmaps of overlapping significant ASVs per dataset. Note that ASVs are restricted only to those tested in the non-rarified tests. Blue=significant, black=non-significant, grey=NA (which I think is because the tools have an internal filtering step).
+
+Clustering was based on hierarchical clustering with the complete method based on binary distances.
+
+```{r define_heatmap_and_combined_list}
+heatmaps_filt <- list()
+all_P_tables_filt <- list()
+
+heatmaps_unfilt <- list()
+all_P_tables_unfilt <- list()
+```
+
+# Concordance
+
+We will calculate the concordance of various tools based on the top 100 features sorted by p-value. 
+
+```{r, concordance calculation}
+library(MESS)
+test_vec1 <- filt_results[[1]][[2]][,1]
+names(test_vec1) <- rownames(filt_results[[1]][[2]])
+
+test_vec2 <- filt_results[[1]][[2]][,2]                             
+names(test_vec2) <- rownames(filt_results[[1]][[2]])
+                            
+test <- ffpe::CATplot(vec1=test_vec1, vec2=test_vec2, maxrank = 100 )
+
+MESS::auc(c(1:100),test$concordance)
+
+#takes in a result list and retunrs the concordance vectors between all methods for each dataset.
+calculate_concordance <- function(Result_list){
+  
+  Ret_list <- list()
+  #loop through each study
+  for(i in 1:length(Result_list)){
+    #get study name
+    study_name <- names(Result_list)[i]
+    message(study_name)
+    #loop through each method
+    Study_list <- list()
+    for(j in 1:ncol(Result_list[[i]][[2]])){
+      vec_1 <- Result_list[[i]][[2]][,j]
+      #give vector names so that it can match rows when it sorts them
+      names(vec_1) <- rownames(Result_list[[i]][[2]])
+      method_name1 <- colnames(Result_list[[i]][[2]][j])
+      for(k in 1:length(Result_list[[i]][[2]])){
+        #if k=j skip so we don't calulate the same thing against itself...
+        if(j!=k){
+          
+          vec_2 <- Result_list[[i]][[2]][,k]
+          #give vector names for same reason as above
+          names(vec_2) <- rownames(Result_list[[i]][[2]])
+          method_name2 <- colnames(Result_list[[i]][[2]][k])
+          #calculate concordnace vector
+          #only test concordance of top 100 ASVs for each tool
+          concord_vec <- ffpe::CATplot(vec1=vec_1, vec2=vec_2, maxrank = 100, make.plot=FALSE)
+          Study_list[[paste(method_name1, method_name2, sep="_")]] <- concord_vec
+        }
+      }
+    }
+    Ret_list[[paste(study_name)]] <- Study_list
+  }
+  return(Ret_list)
+  
+}
+
+
+### test
+Concordance_filt <- calculate_concordance(filt_results)
+## now what to do for each of these
+## the first thing we will do is calculate the AUC for each of the concordance lists
+
+Calculate_AUC <- function(Concord_list){
+  
+  Ret_list <- list()
+  #loop through each study
+  for(i in 1:length(Concord_list)){
+    Study_name <- names(Concord_list)[i]
+    #loop for each tool comparsion in the list
+    ret_vector <- c()
+    for(j in 1:length(Concord_list[[i]])){
+      comp_name <- names(Concord_list[[i]])[j]
+      AUC <- MESS::auc(c(1:100), Concord_list[[i]][[j]]$concordance, type="spline")
+      ret_vector <- setNames(c(ret_vector, AUC), c(names(ret_vector), comp_name))
+    }
+    Ret_list[[paste(Study_name)]] <- ret_vector
+    
+  }
+  return(Ret_list)
+}
+
+filt_concord_auc <- Calculate_AUC(Concordance_filt)
+
+#now we take all these and turn them into a dataframe
+#have to remove
+filt_concord_auc_df <- do.call(rbind, filt_concord_auc)
+## okay for each column we get the mean value...
+Mean_method_concord <- colMeans(filt_concord_auc_df)
+Mean_condord_df <- data.frame(Value=colMeans(filt_concord_auc_df),
+                              Method1=gsub("_.*", "", names(Mean_method_concord)),
+                              Method2=gsub(".*_(?!.*_)", "", names(Mean_method_concord), perl=T))
+
+### nice now convert to wide format
+library(tidyr)
+ 
+
+```

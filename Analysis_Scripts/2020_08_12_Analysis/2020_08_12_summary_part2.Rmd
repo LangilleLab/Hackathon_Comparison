@@ -1,0 +1,2286 @@
+
+
+## Filtered data {.tabset}
+
+
+### ArcticFireSoils
+```{r ArcticFireSoils_heatmap_filt, cache=TRUE}
+     ArcticFireSoils_P_filt <- filt_results[["ArcticFireSoils"]]$adjP_table
+     ArcticFireSoils_P_filt[ArcticFireSoils_P_filt >= 0.05] <- 1
+     ArcticFireSoils_P_filt[ArcticFireSoils_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticFireSoils_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticFireSoils_P_filt <- ArcticFireSoils_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ArcticFireSoils"]] <- ArcticFireSoils_P_filt
+
+     table2plot <- ArcticFireSoils_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ArcticFireSoils"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ArcticFireSoils"]]
+```
+
+
+### ArcticFreshwaters
+```{r ArcticFreshwaters_heatmap_filt, cache=TRUE}
+     ArcticFreshwaters_P_filt <- filt_results[["ArcticFreshwaters"]]$adjP_table
+     ArcticFreshwaters_P_filt[ArcticFreshwaters_P_filt >= 0.05] <- 1
+     ArcticFreshwaters_P_filt[ArcticFreshwaters_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticFreshwaters_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticFreshwaters_P_filt <- ArcticFreshwaters_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ArcticFreshwaters"]] <- ArcticFreshwaters_P_filt
+
+     table2plot <- ArcticFreshwaters_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ArcticFreshwaters"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ArcticFreshwaters"]]
+```
+
+
+### ArcticTransects
+```{r ArcticTransects_heatmap_filt, cache=TRUE}
+     ArcticTransects_P_filt <- filt_results[["ArcticTransects"]]$adjP_table
+     ArcticTransects_P_filt[ArcticTransects_P_filt >= 0.05] <- 1
+     ArcticTransects_P_filt[ArcticTransects_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticTransects_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticTransects_P_filt <- ArcticTransects_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ArcticTransects"]] <- ArcticTransects_P_filt
+
+     table2plot <- ArcticTransects_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ArcticTransects"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ArcticTransects"]]
+```
+
+
+### art_scher
+```{r art_scher_heatmap_filt, cache=TRUE}
+     art_scher_P_filt <- filt_results[["art_scher"]]$adjP_table
+     art_scher_P_filt[art_scher_P_filt >= 0.05] <- 1
+     art_scher_P_filt[art_scher_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(art_scher_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         art_scher_P_filt <- art_scher_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["art_scher"]] <- art_scher_P_filt
+
+     table2plot <- art_scher_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["art_scher"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["art_scher"]]
+```
+
+
+### asd_son
+```{r asd_son_heatmap_filt, cache=TRUE}
+     asd_son_P_filt <- filt_results[["asd_son"]]$adjP_table
+     asd_son_P_filt[asd_son_P_filt >= 0.05] <- 1
+     asd_son_P_filt[asd_son_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(asd_son_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         asd_son_P_filt <- asd_son_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["asd_son"]] <- asd_son_P_filt
+
+     table2plot <- asd_son_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["asd_son"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["asd_son"]]
+```
+
+
+### BISCUIT
+```{r BISCUIT_heatmap_filt, cache=TRUE}
+     BISCUIT_P_filt <- filt_results[["BISCUIT"]]$adjP_table
+     BISCUIT_P_filt[BISCUIT_P_filt >= 0.05] <- 1
+     BISCUIT_P_filt[BISCUIT_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(BISCUIT_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         BISCUIT_P_filt <- BISCUIT_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["BISCUIT"]] <- BISCUIT_P_filt
+
+     table2plot <- BISCUIT_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["BISCUIT"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["BISCUIT"]]
+```
+
+
+### Blueberry
+```{r Blueberry_heatmap_filt, cache=TRUE}
+     Blueberry_P_filt <- filt_results[["Blueberry"]]$adjP_table
+     Blueberry_P_filt[Blueberry_P_filt >= 0.05] <- 1
+     Blueberry_P_filt[Blueberry_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Blueberry_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         Blueberry_P_filt <- Blueberry_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["Blueberry"]] <- Blueberry_P_filt
+
+     table2plot <- Blueberry_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["Blueberry"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["Blueberry"]]
+```
+
+
+### cdi_schubert
+```{r cdi_schubert_heatmap_filt, cache=TRUE}
+     cdi_schubert_P_filt <- filt_results[["cdi_schubert"]]$adjP_table
+     cdi_schubert_P_filt[cdi_schubert_P_filt >= 0.05] <- 1
+     cdi_schubert_P_filt[cdi_schubert_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(cdi_schubert_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         cdi_schubert_P_filt <- cdi_schubert_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["cdi_schubert"]] <- cdi_schubert_P_filt
+
+     table2plot <- cdi_schubert_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["cdi_schubert"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["cdi_schubert"]]
+```
+
+
+### cdi_vincent
+```{r cdi_vincent_heatmap_filt, cache=TRUE}
+     cdi_vincent_P_filt <- filt_results[["cdi_vincent"]]$adjP_table
+     cdi_vincent_P_filt[cdi_vincent_P_filt >= 0.05] <- 1
+     cdi_vincent_P_filt[cdi_vincent_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(cdi_vincent_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         cdi_vincent_P_filt <- cdi_vincent_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["cdi_vincent"]] <- cdi_vincent_P_filt
+
+     table2plot <- cdi_vincent_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["cdi_vincent"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["cdi_vincent"]]
+```
+
+
+### Chemerin
+```{r Chemerin_heatmap_filt, cache=TRUE}
+     Chemerin_P_filt <- filt_results[["Chemerin"]]$adjP_table
+     Chemerin_P_filt[Chemerin_P_filt >= 0.05] <- 1
+     Chemerin_P_filt[Chemerin_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Chemerin_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         Chemerin_P_filt <- Chemerin_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["Chemerin"]] <- Chemerin_P_filt
+
+     table2plot <- Chemerin_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["Chemerin"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["Chemerin"]]
+```
+
+
+### crc_baxter
+```{r crc_baxter_heatmap_filt, cache=TRUE}
+     crc_baxter_P_filt <- filt_results[["crc_baxter"]]$adjP_table
+     crc_baxter_P_filt[crc_baxter_P_filt >= 0.05] <- 1
+     crc_baxter_P_filt[crc_baxter_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(crc_baxter_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         crc_baxter_P_filt <- crc_baxter_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["crc_baxter"]] <- crc_baxter_P_filt
+
+     table2plot <- crc_baxter_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["crc_baxter"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["crc_baxter"]]
+```
+
+
+### crc_zeller
+```{r crc_zeller_heatmap_filt, cache=TRUE}
+     crc_zeller_P_filt <- filt_results[["crc_zeller"]]$adjP_table
+     crc_zeller_P_filt[crc_zeller_P_filt >= 0.05] <- 1
+     crc_zeller_P_filt[crc_zeller_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(crc_zeller_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         crc_zeller_P_filt <- crc_zeller_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["crc_zeller"]] <- crc_zeller_P_filt
+
+     table2plot <- crc_zeller_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["crc_zeller"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["crc_zeller"]]
+```
+
+
+### edd_singh
+```{r edd_singh_heatmap_filt, cache=TRUE}
+     edd_singh_P_filt <- filt_results[["edd_singh"]]$adjP_table
+     edd_singh_P_filt[edd_singh_P_filt >= 0.05] <- 1
+     edd_singh_P_filt[edd_singh_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(edd_singh_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         edd_singh_P_filt <- edd_singh_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["edd_singh"]] <- edd_singh_P_filt
+
+     table2plot <- edd_singh_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["edd_singh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["edd_singh"]]
+```
+
+
+### Exercise
+```{r Exercise_heatmap_filt, cache=TRUE}
+     Exercise_P_filt <- filt_results[["Exercise"]]$adjP_table
+     Exercise_P_filt[Exercise_P_filt >= 0.05] <- 1
+     Exercise_P_filt[Exercise_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Exercise_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         Exercise_P_filt <- Exercise_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["Exercise"]] <- Exercise_P_filt
+
+     table2plot <- Exercise_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["Exercise"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["Exercise"]]
+```
+
+
+### glass_plastic_oberbeckmann
+```{r glass_plastic_oberbeckmann_heatmap_filt, cache=TRUE}
+     glass_plastic_oberbeckmann_P_filt <- filt_results[["glass_plastic_oberbeckmann"]]$adjP_table
+     glass_plastic_oberbeckmann_P_filt[glass_plastic_oberbeckmann_P_filt >= 0.05] <- 1
+     glass_plastic_oberbeckmann_P_filt[glass_plastic_oberbeckmann_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(glass_plastic_oberbeckmann_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         glass_plastic_oberbeckmann_P_filt <- glass_plastic_oberbeckmann_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["glass_plastic_oberbeckmann"]] <- glass_plastic_oberbeckmann_P_filt
+
+     table2plot <- glass_plastic_oberbeckmann_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["glass_plastic_oberbeckmann"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["glass_plastic_oberbeckmann"]]
+```
+
+
+### GWMC_ASIA_NA
+```{r GWMC_ASIA_NA_heatmap_filt, cache=TRUE}
+     GWMC_ASIA_NA_P_filt <- filt_results[["GWMC_ASIA_NA"]]$adjP_table
+     GWMC_ASIA_NA_P_filt[GWMC_ASIA_NA_P_filt >= 0.05] <- 1
+     GWMC_ASIA_NA_P_filt[GWMC_ASIA_NA_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(GWMC_ASIA_NA_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         GWMC_ASIA_NA_P_filt <- GWMC_ASIA_NA_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["GWMC_ASIA_NA"]] <- GWMC_ASIA_NA_P_filt
+
+     table2plot <- GWMC_ASIA_NA_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["GWMC_ASIA_NA"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["GWMC_ASIA_NA"]]
+```
+
+
+### GWMC_HOT_COLD
+```{r GWMC_HOT_COLD_heatmap_filt, cache=TRUE}
+     GWMC_HOT_COLD_P_filt <- filt_results[["GWMC_HOT_COLD"]]$adjP_table
+     GWMC_HOT_COLD_P_filt[GWMC_HOT_COLD_P_filt >= 0.05] <- 1
+     GWMC_HOT_COLD_P_filt[GWMC_HOT_COLD_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(GWMC_HOT_COLD_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         GWMC_HOT_COLD_P_filt <- GWMC_HOT_COLD_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["GWMC_HOT_COLD"]] <- GWMC_HOT_COLD_P_filt
+
+     table2plot <- GWMC_HOT_COLD_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["GWMC_HOT_COLD"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["GWMC_HOT_COLD"]]
+```
+
+
+### hiv_dinh
+```{r hiv_dinh_heatmap_filt, cache=TRUE}
+     hiv_dinh_P_filt <- filt_results[["hiv_dinh"]]$adjP_table
+     hiv_dinh_P_filt[hiv_dinh_P_filt >= 0.05] <- 1
+     hiv_dinh_P_filt[hiv_dinh_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_dinh_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_dinh_P_filt <- hiv_dinh_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["hiv_dinh"]] <- hiv_dinh_P_filt
+
+     table2plot <- hiv_dinh_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["hiv_dinh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["hiv_dinh"]]
+```
+
+
+### hiv_lozupone
+```{r hiv_lozupone_heatmap_filt, cache=TRUE}
+     hiv_lozupone_P_filt <- filt_results[["hiv_lozupone"]]$adjP_table
+     hiv_lozupone_P_filt[hiv_lozupone_P_filt >= 0.05] <- 1
+     hiv_lozupone_P_filt[hiv_lozupone_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_lozupone_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_lozupone_P_filt <- hiv_lozupone_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["hiv_lozupone"]] <- hiv_lozupone_P_filt
+
+     table2plot <- hiv_lozupone_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["hiv_lozupone"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["hiv_lozupone"]]
+```
+
+
+### hiv_noguerajulian
+```{r hiv_noguerajulian_heatmap_filt, cache=TRUE}
+     hiv_noguerajulian_P_filt <- filt_results[["hiv_noguerajulian"]]$adjP_table
+     hiv_noguerajulian_P_filt[hiv_noguerajulian_P_filt >= 0.05] <- 1
+     hiv_noguerajulian_P_filt[hiv_noguerajulian_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_noguerajulian_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_noguerajulian_P_filt <- hiv_noguerajulian_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["hiv_noguerajulian"]] <- hiv_noguerajulian_P_filt
+
+     table2plot <- hiv_noguerajulian_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["hiv_noguerajulian"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["hiv_noguerajulian"]]
+```
+
+
+### ibd_gevers
+```{r ibd_gevers_heatmap_filt, cache=TRUE}
+     ibd_gevers_P_filt <- filt_results[["ibd_gevers"]]$adjP_table
+     ibd_gevers_P_filt[ibd_gevers_P_filt >= 0.05] <- 1
+     ibd_gevers_P_filt[ibd_gevers_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ibd_gevers_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ibd_gevers_P_filt <- ibd_gevers_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ibd_gevers"]] <- ibd_gevers_P_filt
+
+     table2plot <- ibd_gevers_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ibd_gevers"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ibd_gevers"]]
+```
+
+
+### ibd_papa
+```{r ibd_papa_heatmap_filt, cache=TRUE}
+     ibd_papa_P_filt <- filt_results[["ibd_papa"]]$adjP_table
+     ibd_papa_P_filt[ibd_papa_P_filt >= 0.05] <- 1
+     ibd_papa_P_filt[ibd_papa_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ibd_papa_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ibd_papa_P_filt <- ibd_papa_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ibd_papa"]] <- ibd_papa_P_filt
+
+     table2plot <- ibd_papa_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ibd_papa"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ibd_papa"]]
+```
+
+
+### Ji_WTP_DS
+```{r Ji_WTP_DS_heatmap_filt, cache=TRUE}
+     Ji_WTP_DS_P_filt <- filt_results[["Ji_WTP_DS"]]$adjP_table
+     Ji_WTP_DS_P_filt[Ji_WTP_DS_P_filt >= 0.05] <- 1
+     Ji_WTP_DS_P_filt[Ji_WTP_DS_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Ji_WTP_DS_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         Ji_WTP_DS_P_filt <- Ji_WTP_DS_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["Ji_WTP_DS"]] <- Ji_WTP_DS_P_filt
+
+     table2plot <- Ji_WTP_DS_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["Ji_WTP_DS"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["Ji_WTP_DS"]]
+```
+
+
+### MALL
+```{r MALL_heatmap_filt, cache=TRUE}
+     MALL_P_filt <- filt_results[["MALL"]]$adjP_table
+     MALL_P_filt[MALL_P_filt >= 0.05] <- 1
+     MALL_P_filt[MALL_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(MALL_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         MALL_P_filt <- MALL_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["MALL"]] <- MALL_P_filt
+
+     table2plot <- MALL_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["MALL"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["MALL"]]
+```
+
+
+### ob_goodrich
+```{r ob_goodrich_heatmap_filt, cache=TRUE}
+     ob_goodrich_P_filt <- filt_results[["ob_goodrich"]]$adjP_table
+     ob_goodrich_P_filt[ob_goodrich_P_filt >= 0.05] <- 1
+     ob_goodrich_P_filt[ob_goodrich_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_goodrich_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_goodrich_P_filt <- ob_goodrich_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ob_goodrich"]] <- ob_goodrich_P_filt
+
+     table2plot <- ob_goodrich_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ob_goodrich"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ob_goodrich"]]
+```
+
+
+### ob_ross
+```{r ob_ross_heatmap_filt, cache=TRUE}
+     ob_ross_P_filt <- filt_results[["ob_ross"]]$adjP_table
+     ob_ross_P_filt[ob_ross_P_filt >= 0.05] <- 1
+     ob_ross_P_filt[ob_ross_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_ross_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_ross_P_filt <- ob_ross_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ob_ross"]] <- ob_ross_P_filt
+
+     table2plot <- ob_ross_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ob_ross"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ob_ross"]]
+```
+
+
+### ob_turnbaugh
+```{r ob_turnbaugh_heatmap_filt, cache=TRUE}
+     ob_turnbaugh_P_filt <- filt_results[["ob_turnbaugh"]]$adjP_table
+     ob_turnbaugh_P_filt[ob_turnbaugh_P_filt >= 0.05] <- 1
+     ob_turnbaugh_P_filt[ob_turnbaugh_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_turnbaugh_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_turnbaugh_P_filt <- ob_turnbaugh_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ob_turnbaugh"]] <- ob_turnbaugh_P_filt
+
+     table2plot <- ob_turnbaugh_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ob_turnbaugh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ob_turnbaugh"]]
+```
+
+
+### ob_zhu
+```{r ob_zhu_heatmap_filt, cache=TRUE}
+     ob_zhu_P_filt <- filt_results[["ob_zhu"]]$adjP_table
+     ob_zhu_P_filt[ob_zhu_P_filt >= 0.05] <- 1
+     ob_zhu_P_filt[ob_zhu_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_zhu_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_zhu_P_filt <- ob_zhu_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["ob_zhu"]] <- ob_zhu_P_filt
+
+     table2plot <- ob_zhu_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["ob_zhu"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["ob_zhu"]]
+```
+
+
+### Office
+```{r Office_heatmap_filt, cache=TRUE}
+     Office_P_filt <- filt_results[["Office"]]$adjP_table
+     Office_P_filt[Office_P_filt >= 0.05] <- 1
+     Office_P_filt[Office_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Office_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         Office_P_filt <- Office_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["Office"]] <- Office_P_filt
+
+     table2plot <- Office_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["Office"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["Office"]]
+```
+
+
+### par_scheperjans
+```{r par_scheperjans_heatmap_filt, cache=TRUE}
+     par_scheperjans_P_filt <- filt_results[["par_scheperjans"]]$adjP_table
+     par_scheperjans_P_filt[par_scheperjans_P_filt >= 0.05] <- 1
+     par_scheperjans_P_filt[par_scheperjans_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(par_scheperjans_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         par_scheperjans_P_filt <- par_scheperjans_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["par_scheperjans"]] <- par_scheperjans_P_filt
+
+     table2plot <- par_scheperjans_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["par_scheperjans"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["par_scheperjans"]]
+```
+
+
+### sed_plastic_hoellein
+```{r sed_plastic_hoellein_heatmap_filt, cache=TRUE}
+     sed_plastic_hoellein_P_filt <- filt_results[["sed_plastic_hoellein"]]$adjP_table
+     sed_plastic_hoellein_P_filt[sed_plastic_hoellein_P_filt >= 0.05] <- 1
+     sed_plastic_hoellein_P_filt[sed_plastic_hoellein_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sed_plastic_hoellein_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         sed_plastic_hoellein_P_filt <- sed_plastic_hoellein_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["sed_plastic_hoellein"]] <- sed_plastic_hoellein_P_filt
+
+     table2plot <- sed_plastic_hoellein_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["sed_plastic_hoellein"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["sed_plastic_hoellein"]]
+```
+
+
+### sed_plastic_rosato
+```{r sed_plastic_rosato_heatmap_filt, cache=TRUE}
+     sed_plastic_rosato_P_filt <- filt_results[["sed_plastic_rosato"]]$adjP_table
+     sed_plastic_rosato_P_filt[sed_plastic_rosato_P_filt >= 0.05] <- 1
+     sed_plastic_rosato_P_filt[sed_plastic_rosato_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sed_plastic_rosato_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         sed_plastic_rosato_P_filt <- sed_plastic_rosato_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["sed_plastic_rosato"]] <- sed_plastic_rosato_P_filt
+
+     table2plot <- sed_plastic_rosato_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["sed_plastic_rosato"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["sed_plastic_rosato"]]
+```
+
+
+### seston_plastic_mccormick
+```{r seston_plastic_mccormick_heatmap_filt, cache=TRUE}
+     seston_plastic_mccormick_P_filt <- filt_results[["seston_plastic_mccormick"]]$adjP_table
+     seston_plastic_mccormick_P_filt[seston_plastic_mccormick_P_filt >= 0.05] <- 1
+     seston_plastic_mccormick_P_filt[seston_plastic_mccormick_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(seston_plastic_mccormick_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         seston_plastic_mccormick_P_filt <- seston_plastic_mccormick_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["seston_plastic_mccormick"]] <- seston_plastic_mccormick_P_filt
+
+     table2plot <- seston_plastic_mccormick_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["seston_plastic_mccormick"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["seston_plastic_mccormick"]]
+```
+
+
+### sw_plastic_frere
+```{r sw_plastic_frere_heatmap_filt, cache=TRUE}
+     sw_plastic_frere_P_filt <- filt_results[["sw_plastic_frere"]]$adjP_table
+     sw_plastic_frere_P_filt[sw_plastic_frere_P_filt >= 0.05] <- 1
+     sw_plastic_frere_P_filt[sw_plastic_frere_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sw_plastic_frere_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         sw_plastic_frere_P_filt <- sw_plastic_frere_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["sw_plastic_frere"]] <- sw_plastic_frere_P_filt
+
+     table2plot <- sw_plastic_frere_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["sw_plastic_frere"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["sw_plastic_frere"]]
+```
+
+
+### sw_sed_detender
+```{r sw_sed_detender_heatmap_filt, cache=TRUE}
+     sw_sed_detender_P_filt <- filt_results[["sw_sed_detender"]]$adjP_table
+     sw_sed_detender_P_filt[sw_sed_detender_P_filt >= 0.05] <- 1
+     sw_sed_detender_P_filt[sw_sed_detender_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sw_sed_detender_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         sw_sed_detender_P_filt <- sw_sed_detender_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["sw_sed_detender"]] <- sw_sed_detender_P_filt
+
+     table2plot <- sw_sed_detender_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["sw_sed_detender"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["sw_sed_detender"]]
+```
+
+
+### t1d_alkanani
+```{r t1d_alkanani_heatmap_filt, cache=TRUE}
+     t1d_alkanani_P_filt <- filt_results[["t1d_alkanani"]]$adjP_table
+     t1d_alkanani_P_filt[t1d_alkanani_P_filt >= 0.05] <- 1
+     t1d_alkanani_P_filt[t1d_alkanani_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(t1d_alkanani_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         t1d_alkanani_P_filt <- t1d_alkanani_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["t1d_alkanani"]] <- t1d_alkanani_P_filt
+
+     table2plot <- t1d_alkanani_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["t1d_alkanani"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["t1d_alkanani"]]
+```
+
+
+### t1d_mejialeon
+```{r t1d_mejialeon_heatmap_filt, cache=TRUE}
+     t1d_mejialeon_P_filt <- filt_results[["t1d_mejialeon"]]$adjP_table
+     t1d_mejialeon_P_filt[t1d_mejialeon_P_filt >= 0.05] <- 1
+     t1d_mejialeon_P_filt[t1d_mejialeon_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(t1d_mejialeon_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         t1d_mejialeon_P_filt <- t1d_mejialeon_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["t1d_mejialeon"]] <- t1d_mejialeon_P_filt
+
+     table2plot <- t1d_mejialeon_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["t1d_mejialeon"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["t1d_mejialeon"]]
+```
+
+
+### wood_plastic_kesy
+```{r wood_plastic_kesy_heatmap_filt, cache=TRUE}
+     wood_plastic_kesy_P_filt <- filt_results[["wood_plastic_kesy"]]$adjP_table
+     wood_plastic_kesy_P_filt[wood_plastic_kesy_P_filt >= 0.05] <- 1
+     wood_plastic_kesy_P_filt[wood_plastic_kesy_P_filt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(wood_plastic_kesy_P_filt)) >= 8)
+     if(length(features2remove) > 0) {
+         wood_plastic_kesy_P_filt <- wood_plastic_kesy_P_filt[-features2remove, ]
+      }
+     all_P_tables_filt[["wood_plastic_kesy"]] <- wood_plastic_kesy_P_filt
+
+     table2plot <- wood_plastic_kesy_P_filt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_filt[["wood_plastic_kesy"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_filt[["wood_plastic_kesy"]]
+```
+
+
+## Unfiltered data {.tabset}
+
+
+### ArcticFireSoils
+```{r ArcticFireSoils_heatmap_unfilt, cache=TRUE}
+     ArcticFireSoils_P_unfilt <- unfilt_results[["ArcticFireSoils"]]$adjP_table
+     ArcticFireSoils_P_unfilt[ArcticFireSoils_P_unfilt >= 0.05] <- 1
+     ArcticFireSoils_P_unfilt[ArcticFireSoils_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticFireSoils_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticFireSoils_P_unfilt <- ArcticFireSoils_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ArcticFireSoils"]] <- ArcticFireSoils_P_unfilt
+
+     table2plot <- ArcticFireSoils_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ArcticFireSoils"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ArcticFireSoils"]]
+```
+
+
+### ArcticFreshwaters
+```{r ArcticFreshwaters_heatmap_unfilt, cache=TRUE}
+     ArcticFreshwaters_P_unfilt <- unfilt_results[["ArcticFreshwaters"]]$adjP_table
+     ArcticFreshwaters_P_unfilt[ArcticFreshwaters_P_unfilt >= 0.05] <- 1
+     ArcticFreshwaters_P_unfilt[ArcticFreshwaters_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticFreshwaters_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticFreshwaters_P_unfilt <- ArcticFreshwaters_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ArcticFreshwaters"]] <- ArcticFreshwaters_P_unfilt
+
+     table2plot <- ArcticFreshwaters_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ArcticFreshwaters"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ArcticFreshwaters"]]
+```
+
+
+### ArcticTransects
+```{r ArcticTransects_heatmap_unfilt, cache=TRUE}
+     ArcticTransects_P_unfilt <- unfilt_results[["ArcticTransects"]]$adjP_table
+     ArcticTransects_P_unfilt[ArcticTransects_P_unfilt >= 0.05] <- 1
+     ArcticTransects_P_unfilt[ArcticTransects_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ArcticTransects_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ArcticTransects_P_unfilt <- ArcticTransects_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ArcticTransects"]] <- ArcticTransects_P_unfilt
+
+     table2plot <- ArcticTransects_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ArcticTransects"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ArcticTransects"]]
+```
+
+
+### art_scher
+```{r art_scher_heatmap_unfilt, cache=TRUE}
+     art_scher_P_unfilt <- unfilt_results[["art_scher"]]$adjP_table
+     art_scher_P_unfilt[art_scher_P_unfilt >= 0.05] <- 1
+     art_scher_P_unfilt[art_scher_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(art_scher_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         art_scher_P_unfilt <- art_scher_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["art_scher"]] <- art_scher_P_unfilt
+
+     table2plot <- art_scher_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["art_scher"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["art_scher"]]
+```
+
+
+### asd_son
+```{r asd_son_heatmap_unfilt, cache=TRUE}
+     asd_son_P_unfilt <- unfilt_results[["asd_son"]]$adjP_table
+     asd_son_P_unfilt[asd_son_P_unfilt >= 0.05] <- 1
+     asd_son_P_unfilt[asd_son_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(asd_son_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         asd_son_P_unfilt <- asd_son_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["asd_son"]] <- asd_son_P_unfilt
+
+     table2plot <- asd_son_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["asd_son"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["asd_son"]]
+```
+
+
+### BISCUIT
+```{r BISCUIT_heatmap_unfilt, cache=TRUE}
+     BISCUIT_P_unfilt <- unfilt_results[["BISCUIT"]]$adjP_table
+     BISCUIT_P_unfilt[BISCUIT_P_unfilt >= 0.05] <- 1
+     BISCUIT_P_unfilt[BISCUIT_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(BISCUIT_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         BISCUIT_P_unfilt <- BISCUIT_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["BISCUIT"]] <- BISCUIT_P_unfilt
+
+     table2plot <- BISCUIT_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["BISCUIT"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["BISCUIT"]]
+```
+
+
+### Blueberry
+```{r Blueberry_heatmap_unfilt, cache=TRUE}
+     Blueberry_P_unfilt <- unfilt_results[["Blueberry"]]$adjP_table
+     Blueberry_P_unfilt[Blueberry_P_unfilt >= 0.05] <- 1
+     Blueberry_P_unfilt[Blueberry_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Blueberry_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         Blueberry_P_unfilt <- Blueberry_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["Blueberry"]] <- Blueberry_P_unfilt
+
+     table2plot <- Blueberry_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["Blueberry"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["Blueberry"]]
+```
+
+
+### cdi_schubert
+```{r cdi_schubert_heatmap_unfilt, cache=TRUE}
+     cdi_schubert_P_unfilt <- unfilt_results[["cdi_schubert"]]$adjP_table
+     cdi_schubert_P_unfilt[cdi_schubert_P_unfilt >= 0.05] <- 1
+     cdi_schubert_P_unfilt[cdi_schubert_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(cdi_schubert_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         cdi_schubert_P_unfilt <- cdi_schubert_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["cdi_schubert"]] <- cdi_schubert_P_unfilt
+
+     table2plot <- cdi_schubert_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["cdi_schubert"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["cdi_schubert"]]
+```
+
+
+### cdi_vincent
+```{r cdi_vincent_heatmap_unfilt, cache=TRUE}
+     cdi_vincent_P_unfilt <- unfilt_results[["cdi_vincent"]]$adjP_table
+     cdi_vincent_P_unfilt[cdi_vincent_P_unfilt >= 0.05] <- 1
+     cdi_vincent_P_unfilt[cdi_vincent_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(cdi_vincent_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         cdi_vincent_P_unfilt <- cdi_vincent_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["cdi_vincent"]] <- cdi_vincent_P_unfilt
+
+     table2plot <- cdi_vincent_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["cdi_vincent"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["cdi_vincent"]]
+```
+
+
+### Chemerin
+```{r Chemerin_heatmap_unfilt, cache=TRUE}
+     Chemerin_P_unfilt <- unfilt_results[["Chemerin"]]$adjP_table
+     Chemerin_P_unfilt[Chemerin_P_unfilt >= 0.05] <- 1
+     Chemerin_P_unfilt[Chemerin_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Chemerin_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         Chemerin_P_unfilt <- Chemerin_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["Chemerin"]] <- Chemerin_P_unfilt
+
+     table2plot <- Chemerin_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["Chemerin"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["Chemerin"]]
+```
+
+
+### crc_baxter
+```{r crc_baxter_heatmap_unfilt, cache=TRUE}
+     crc_baxter_P_unfilt <- unfilt_results[["crc_baxter"]]$adjP_table
+     crc_baxter_P_unfilt[crc_baxter_P_unfilt >= 0.05] <- 1
+     crc_baxter_P_unfilt[crc_baxter_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(crc_baxter_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         crc_baxter_P_unfilt <- crc_baxter_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["crc_baxter"]] <- crc_baxter_P_unfilt
+
+     table2plot <- crc_baxter_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["crc_baxter"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["crc_baxter"]]
+```
+
+
+### crc_zeller
+```{r crc_zeller_heatmap_unfilt, cache=TRUE}
+     crc_zeller_P_unfilt <- unfilt_results[["crc_zeller"]]$adjP_table
+     crc_zeller_P_unfilt[crc_zeller_P_unfilt >= 0.05] <- 1
+     crc_zeller_P_unfilt[crc_zeller_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(crc_zeller_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         crc_zeller_P_unfilt <- crc_zeller_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["crc_zeller"]] <- crc_zeller_P_unfilt
+
+     table2plot <- crc_zeller_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["crc_zeller"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["crc_zeller"]]
+```
+
+
+### edd_singh
+```{r edd_singh_heatmap_unfilt, cache=TRUE}
+     edd_singh_P_unfilt <- unfilt_results[["edd_singh"]]$adjP_table
+     edd_singh_P_unfilt[edd_singh_P_unfilt >= 0.05] <- 1
+     edd_singh_P_unfilt[edd_singh_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(edd_singh_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         edd_singh_P_unfilt <- edd_singh_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["edd_singh"]] <- edd_singh_P_unfilt
+
+     table2plot <- edd_singh_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["edd_singh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["edd_singh"]]
+```
+
+
+### Exercise
+```{r Exercise_heatmap_unfilt, cache=TRUE}
+     Exercise_P_unfilt <- unfilt_results[["Exercise"]]$adjP_table
+     Exercise_P_unfilt[Exercise_P_unfilt >= 0.05] <- 1
+     Exercise_P_unfilt[Exercise_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Exercise_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         Exercise_P_unfilt <- Exercise_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["Exercise"]] <- Exercise_P_unfilt
+
+     table2plot <- Exercise_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["Exercise"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["Exercise"]]
+```
+
+
+### glass_plastic_oberbeckmann
+```{r glass_plastic_oberbeckmann_heatmap_unfilt, cache=TRUE}
+     glass_plastic_oberbeckmann_P_unfilt <- unfilt_results[["glass_plastic_oberbeckmann"]]$adjP_table
+     glass_plastic_oberbeckmann_P_unfilt[glass_plastic_oberbeckmann_P_unfilt >= 0.05] <- 1
+     glass_plastic_oberbeckmann_P_unfilt[glass_plastic_oberbeckmann_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(glass_plastic_oberbeckmann_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         glass_plastic_oberbeckmann_P_unfilt <- glass_plastic_oberbeckmann_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["glass_plastic_oberbeckmann"]] <- glass_plastic_oberbeckmann_P_unfilt
+
+     table2plot <- glass_plastic_oberbeckmann_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["glass_plastic_oberbeckmann"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["glass_plastic_oberbeckmann"]]
+```
+
+
+### GWMC_ASIA_NA
+```{r GWMC_ASIA_NA_heatmap_unfilt, cache=TRUE}
+     GWMC_ASIA_NA_P_unfilt <- unfilt_results[["GWMC_ASIA_NA"]]$adjP_table
+     GWMC_ASIA_NA_P_unfilt[GWMC_ASIA_NA_P_unfilt >= 0.05] <- 1
+     GWMC_ASIA_NA_P_unfilt[GWMC_ASIA_NA_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(GWMC_ASIA_NA_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         GWMC_ASIA_NA_P_unfilt <- GWMC_ASIA_NA_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["GWMC_ASIA_NA"]] <- GWMC_ASIA_NA_P_unfilt
+
+     table2plot <- GWMC_ASIA_NA_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["GWMC_ASIA_NA"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["GWMC_ASIA_NA"]]
+```
+
+
+### GWMC_HOT_COLD
+```{r GWMC_HOT_COLD_heatmap_unfilt, cache=TRUE}
+     GWMC_HOT_COLD_P_unfilt <- unfilt_results[["GWMC_HOT_COLD"]]$adjP_table
+     GWMC_HOT_COLD_P_unfilt[GWMC_HOT_COLD_P_unfilt >= 0.05] <- 1
+     GWMC_HOT_COLD_P_unfilt[GWMC_HOT_COLD_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(GWMC_HOT_COLD_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         GWMC_HOT_COLD_P_unfilt <- GWMC_HOT_COLD_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["GWMC_HOT_COLD"]] <- GWMC_HOT_COLD_P_unfilt
+
+     table2plot <- GWMC_HOT_COLD_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["GWMC_HOT_COLD"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["GWMC_HOT_COLD"]]
+```
+
+
+### hiv_dinh
+```{r hiv_dinh_heatmap_unfilt, cache=TRUE}
+     hiv_dinh_P_unfilt <- unfilt_results[["hiv_dinh"]]$adjP_table
+     hiv_dinh_P_unfilt[hiv_dinh_P_unfilt >= 0.05] <- 1
+     hiv_dinh_P_unfilt[hiv_dinh_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_dinh_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_dinh_P_unfilt <- hiv_dinh_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["hiv_dinh"]] <- hiv_dinh_P_unfilt
+
+     table2plot <- hiv_dinh_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["hiv_dinh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["hiv_dinh"]]
+```
+
+
+### hiv_lozupone
+```{r hiv_lozupone_heatmap_unfilt, cache=TRUE}
+     hiv_lozupone_P_unfilt <- unfilt_results[["hiv_lozupone"]]$adjP_table
+     hiv_lozupone_P_unfilt[hiv_lozupone_P_unfilt >= 0.05] <- 1
+     hiv_lozupone_P_unfilt[hiv_lozupone_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_lozupone_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_lozupone_P_unfilt <- hiv_lozupone_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["hiv_lozupone"]] <- hiv_lozupone_P_unfilt
+
+     table2plot <- hiv_lozupone_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["hiv_lozupone"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["hiv_lozupone"]]
+```
+
+
+### hiv_noguerajulian
+```{r hiv_noguerajulian_heatmap_unfilt, cache=TRUE}
+     hiv_noguerajulian_P_unfilt <- unfilt_results[["hiv_noguerajulian"]]$adjP_table
+     hiv_noguerajulian_P_unfilt[hiv_noguerajulian_P_unfilt >= 0.05] <- 1
+     hiv_noguerajulian_P_unfilt[hiv_noguerajulian_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(hiv_noguerajulian_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         hiv_noguerajulian_P_unfilt <- hiv_noguerajulian_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["hiv_noguerajulian"]] <- hiv_noguerajulian_P_unfilt
+
+     table2plot <- hiv_noguerajulian_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["hiv_noguerajulian"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["hiv_noguerajulian"]]
+```
+
+
+### ibd_gevers
+```{r ibd_gevers_heatmap_unfilt, cache=TRUE}
+     ibd_gevers_P_unfilt <- unfilt_results[["ibd_gevers"]]$adjP_table
+     ibd_gevers_P_unfilt[ibd_gevers_P_unfilt >= 0.05] <- 1
+     ibd_gevers_P_unfilt[ibd_gevers_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ibd_gevers_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ibd_gevers_P_unfilt <- ibd_gevers_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ibd_gevers"]] <- ibd_gevers_P_unfilt
+
+     table2plot <- ibd_gevers_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ibd_gevers"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ibd_gevers"]]
+```
+
+
+### ibd_papa
+```{r ibd_papa_heatmap_unfilt, cache=TRUE}
+     ibd_papa_P_unfilt <- unfilt_results[["ibd_papa"]]$adjP_table
+     ibd_papa_P_unfilt[ibd_papa_P_unfilt >= 0.05] <- 1
+     ibd_papa_P_unfilt[ibd_papa_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ibd_papa_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ibd_papa_P_unfilt <- ibd_papa_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ibd_papa"]] <- ibd_papa_P_unfilt
+
+     table2plot <- ibd_papa_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ibd_papa"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ibd_papa"]]
+```
+
+
+### Ji_WTP_DS
+```{r Ji_WTP_DS_heatmap_unfilt, cache=TRUE}
+     Ji_WTP_DS_P_unfilt <- unfilt_results[["Ji_WTP_DS"]]$adjP_table
+     Ji_WTP_DS_P_unfilt[Ji_WTP_DS_P_unfilt >= 0.05] <- 1
+     Ji_WTP_DS_P_unfilt[Ji_WTP_DS_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Ji_WTP_DS_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         Ji_WTP_DS_P_unfilt <- Ji_WTP_DS_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["Ji_WTP_DS"]] <- Ji_WTP_DS_P_unfilt
+
+     table2plot <- Ji_WTP_DS_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["Ji_WTP_DS"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["Ji_WTP_DS"]]
+```
+
+
+### MALL
+```{r MALL_heatmap_unfilt, cache=TRUE}
+     MALL_P_unfilt <- unfilt_results[["MALL"]]$adjP_table
+     MALL_P_unfilt[MALL_P_unfilt >= 0.05] <- 1
+     MALL_P_unfilt[MALL_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(MALL_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         MALL_P_unfilt <- MALL_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["MALL"]] <- MALL_P_unfilt
+
+     table2plot <- MALL_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["MALL"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["MALL"]]
+```
+
+
+### ob_goodrich
+```{r ob_goodrich_heatmap_unfilt, cache=TRUE}
+     ob_goodrich_P_unfilt <- unfilt_results[["ob_goodrich"]]$adjP_table
+     ob_goodrich_P_unfilt[ob_goodrich_P_unfilt >= 0.05] <- 1
+     ob_goodrich_P_unfilt[ob_goodrich_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_goodrich_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_goodrich_P_unfilt <- ob_goodrich_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ob_goodrich"]] <- ob_goodrich_P_unfilt
+
+     table2plot <- ob_goodrich_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ob_goodrich"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ob_goodrich"]]
+```
+
+
+### ob_ross
+```{r ob_ross_heatmap_unfilt, cache=TRUE}
+     ob_ross_P_unfilt <- unfilt_results[["ob_ross"]]$adjP_table
+     ob_ross_P_unfilt[ob_ross_P_unfilt >= 0.05] <- 1
+     ob_ross_P_unfilt[ob_ross_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_ross_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_ross_P_unfilt <- ob_ross_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ob_ross"]] <- ob_ross_P_unfilt
+
+     table2plot <- ob_ross_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ob_ross"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ob_ross"]]
+```
+
+
+### ob_turnbaugh
+```{r ob_turnbaugh_heatmap_unfilt, cache=TRUE}
+     ob_turnbaugh_P_unfilt <- unfilt_results[["ob_turnbaugh"]]$adjP_table
+     ob_turnbaugh_P_unfilt[ob_turnbaugh_P_unfilt >= 0.05] <- 1
+     ob_turnbaugh_P_unfilt[ob_turnbaugh_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_turnbaugh_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_turnbaugh_P_unfilt <- ob_turnbaugh_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ob_turnbaugh"]] <- ob_turnbaugh_P_unfilt
+
+     table2plot <- ob_turnbaugh_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ob_turnbaugh"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ob_turnbaugh"]]
+```
+
+
+### ob_zhu
+```{r ob_zhu_heatmap_unfilt, cache=TRUE}
+     ob_zhu_P_unfilt <- unfilt_results[["ob_zhu"]]$adjP_table
+     ob_zhu_P_unfilt[ob_zhu_P_unfilt >= 0.05] <- 1
+     ob_zhu_P_unfilt[ob_zhu_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(ob_zhu_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         ob_zhu_P_unfilt <- ob_zhu_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["ob_zhu"]] <- ob_zhu_P_unfilt
+
+     table2plot <- ob_zhu_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["ob_zhu"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["ob_zhu"]]
+```
+
+
+### Office
+```{r Office_heatmap_unfilt, cache=TRUE}
+     Office_P_unfilt <- unfilt_results[["Office"]]$adjP_table
+     Office_P_unfilt[Office_P_unfilt >= 0.05] <- 1
+     Office_P_unfilt[Office_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(Office_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         Office_P_unfilt <- Office_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["Office"]] <- Office_P_unfilt
+
+     table2plot <- Office_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["Office"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["Office"]]
+```
+
+
+### par_scheperjans
+```{r par_scheperjans_heatmap_unfilt, cache=TRUE}
+     par_scheperjans_P_unfilt <- unfilt_results[["par_scheperjans"]]$adjP_table
+     par_scheperjans_P_unfilt[par_scheperjans_P_unfilt >= 0.05] <- 1
+     par_scheperjans_P_unfilt[par_scheperjans_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(par_scheperjans_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         par_scheperjans_P_unfilt <- par_scheperjans_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["par_scheperjans"]] <- par_scheperjans_P_unfilt
+
+     table2plot <- par_scheperjans_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["par_scheperjans"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["par_scheperjans"]]
+```
+
+
+### sed_plastic_hoellein
+```{r sed_plastic_hoellein_heatmap_unfilt, cache=TRUE}
+     sed_plastic_hoellein_P_unfilt <- unfilt_results[["sed_plastic_hoellein"]]$adjP_table
+     sed_plastic_hoellein_P_unfilt[sed_plastic_hoellein_P_unfilt >= 0.05] <- 1
+     sed_plastic_hoellein_P_unfilt[sed_plastic_hoellein_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sed_plastic_hoellein_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         sed_plastic_hoellein_P_unfilt <- sed_plastic_hoellein_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["sed_plastic_hoellein"]] <- sed_plastic_hoellein_P_unfilt
+
+     table2plot <- sed_plastic_hoellein_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["sed_plastic_hoellein"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["sed_plastic_hoellein"]]
+```
+
+
+### sed_plastic_rosato
+```{r sed_plastic_rosato_heatmap_unfilt, cache=TRUE}
+     sed_plastic_rosato_P_unfilt <- unfilt_results[["sed_plastic_rosato"]]$adjP_table
+     sed_plastic_rosato_P_unfilt[sed_plastic_rosato_P_unfilt >= 0.05] <- 1
+     sed_plastic_rosato_P_unfilt[sed_plastic_rosato_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sed_plastic_rosato_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         sed_plastic_rosato_P_unfilt <- sed_plastic_rosato_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["sed_plastic_rosato"]] <- sed_plastic_rosato_P_unfilt
+
+     table2plot <- sed_plastic_rosato_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["sed_plastic_rosato"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["sed_plastic_rosato"]]
+```
+
+
+### seston_plastic_mccormick
+```{r seston_plastic_mccormick_heatmap_unfilt, cache=TRUE}
+     seston_plastic_mccormick_P_unfilt <- unfilt_results[["seston_plastic_mccormick"]]$adjP_table
+     seston_plastic_mccormick_P_unfilt[seston_plastic_mccormick_P_unfilt >= 0.05] <- 1
+     seston_plastic_mccormick_P_unfilt[seston_plastic_mccormick_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(seston_plastic_mccormick_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         seston_plastic_mccormick_P_unfilt <- seston_plastic_mccormick_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["seston_plastic_mccormick"]] <- seston_plastic_mccormick_P_unfilt
+
+     table2plot <- seston_plastic_mccormick_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["seston_plastic_mccormick"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["seston_plastic_mccormick"]]
+```
+
+
+### sw_plastic_frere
+```{r sw_plastic_frere_heatmap_unfilt, cache=TRUE}
+     sw_plastic_frere_P_unfilt <- unfilt_results[["sw_plastic_frere"]]$adjP_table
+     sw_plastic_frere_P_unfilt[sw_plastic_frere_P_unfilt >= 0.05] <- 1
+     sw_plastic_frere_P_unfilt[sw_plastic_frere_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sw_plastic_frere_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         sw_plastic_frere_P_unfilt <- sw_plastic_frere_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["sw_plastic_frere"]] <- sw_plastic_frere_P_unfilt
+
+     table2plot <- sw_plastic_frere_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["sw_plastic_frere"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["sw_plastic_frere"]]
+```
+
+
+### sw_sed_detender
+```{r sw_sed_detender_heatmap_unfilt, cache=TRUE}
+     sw_sed_detender_P_unfilt <- unfilt_results[["sw_sed_detender"]]$adjP_table
+     sw_sed_detender_P_unfilt[sw_sed_detender_P_unfilt >= 0.05] <- 1
+     sw_sed_detender_P_unfilt[sw_sed_detender_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(sw_sed_detender_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         sw_sed_detender_P_unfilt <- sw_sed_detender_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["sw_sed_detender"]] <- sw_sed_detender_P_unfilt
+
+     table2plot <- sw_sed_detender_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["sw_sed_detender"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["sw_sed_detender"]]
+```
+
+
+### t1d_alkanani
+```{r t1d_alkanani_heatmap_unfilt, cache=TRUE}
+     t1d_alkanani_P_unfilt <- unfilt_results[["t1d_alkanani"]]$adjP_table
+     t1d_alkanani_P_unfilt[t1d_alkanani_P_unfilt >= 0.05] <- 1
+     t1d_alkanani_P_unfilt[t1d_alkanani_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(t1d_alkanani_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         t1d_alkanani_P_unfilt <- t1d_alkanani_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["t1d_alkanani"]] <- t1d_alkanani_P_unfilt
+
+     table2plot <- t1d_alkanani_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["t1d_alkanani"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["t1d_alkanani"]]
+```
+
+
+### t1d_mejialeon
+```{r t1d_mejialeon_heatmap_unfilt, cache=TRUE}
+     t1d_mejialeon_P_unfilt <- unfilt_results[["t1d_mejialeon"]]$adjP_table
+     t1d_mejialeon_P_unfilt[t1d_mejialeon_P_unfilt >= 0.05] <- 1
+     t1d_mejialeon_P_unfilt[t1d_mejialeon_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(t1d_mejialeon_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         t1d_mejialeon_P_unfilt <- t1d_mejialeon_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["t1d_mejialeon"]] <- t1d_mejialeon_P_unfilt
+
+     table2plot <- t1d_mejialeon_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["t1d_mejialeon"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["t1d_mejialeon"]]
+```
+
+
+### wood_plastic_kesy
+```{r wood_plastic_kesy_heatmap_unfilt, cache=TRUE}
+     wood_plastic_kesy_P_unfilt <- unfilt_results[["wood_plastic_kesy"]]$adjP_table
+     wood_plastic_kesy_P_unfilt[wood_plastic_kesy_P_unfilt >= 0.05] <- 1
+     wood_plastic_kesy_P_unfilt[wood_plastic_kesy_P_unfilt < 0.05] <- 0
+     # Remove features that are all NA in at least 8 columns (which corresponds to ASV only in the rarified data)
+     features2remove <- which(rowSums(is.na(wood_plastic_kesy_P_unfilt)) >= 8)
+     if(length(features2remove) > 0) {
+         wood_plastic_kesy_P_unfilt <- wood_plastic_kesy_P_unfilt[-features2remove, ]
+      }
+     all_P_tables_unfilt[["wood_plastic_kesy"]] <- wood_plastic_kesy_P_unfilt
+
+     table2plot <- wood_plastic_kesy_P_unfilt
+     if(nrow(table2plot) > 10000) {
+         table2plot <- table2plot[sample(rownames(table2plot), 10000), ]
+     }
+
+     heatmaps_unfilt[["wood_plastic_kesy"]] <- pheatmap(t(table2plot),
+                                                  color=c("cornflowerblue", "black"),
+                                                  clustering_distance_cols = "binary",
+                                                  clustering_distance_rows = "binary",
+                                                  clustering_method = "complete",
+                                                  show_colnames = FALSE,
+                                                  legend=FALSE)
+
+
+     heatmaps_unfilt[["wood_plastic_kesy"]]
+```

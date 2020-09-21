@@ -1,0 +1,180 @@
+
+
+## Combined {.tabset}
+
+Then made huge table of all ASV significance across all datasets and plotted as a heatmap. NOTE THAT THIS HEATMAP IS ACTUALLY BASED ON A RANDOM SUB-SAMPLING OF 3,000 RANDOM FEATURES. I kept getting this error when trying to plot more features: "Error: node stack overflow Error during wrapup: node stack overflow"
+
+### Filtered data
+
+```{r combined_heatmap_filt, fig.height=6, fig.width=12, cache=TRUE}
+# Get combined table of binary significance patterns.
+
+split_vec_filt <- c()
+for(dataset in names(all_P_tables_filt)) {
+  split_vec_filt <- c(split_vec_filt, rep(dataset, length(heatmaps_filt[[dataset]]$tree_col$labels)))
+}
+
+combined_sig_table_filt <- do.call("rbind", all_P_tables_filt)
+
+set.seed(131)
+random_row_i <- sample(1:nrow(combined_sig_table_filt), size=3000, replace=FALSE)
+
+combined_sig_table_filt_subset <- as.matrix(combined_sig_table_filt[random_row_i, ])
+
+col_rnorm = colorRamp2(c(0, 1), c("cornflowerblue", "white"))
+
+heatmaps_filt[["combined"]] <- Heatmap(matrix=t(combined_sig_table_filt_subset),
+                                  col=col_rnorm,
+                                  name="Combined Heatmap",
+                                  show_column_dend = FALSE,
+                                  show_column_names = FALSE,
+                                  #show_row_dend=FALSE,
+                                  #show_row_names=FALSE,
+                                  column_split=split_vec_filt[random_row_i],
+                                  #column_names_rot = 45,
+                                  #row_title_rot=0,
+                                  row_names_rot = 0,
+                                  column_title_rot=90,
+                                  column_names_centered = T,
+                                  column_title_gp = gpar(fontsize=8),
+                                  #row_gap=unit(3, "mm"),
+                                  clustering_distance_rows="binary",
+                                  clustering_distance_columns="binary",
+                                  show_heatmap_legend=F,
+                                  height=unit(.5, "npc"))
+
+heatmaps_filt[["combined"]]
+
+```
+
+### Unfiltered data
+
+```{r combined_heatmap_unfilt, fig.height=6, fig.width=12, cache=TRUE}
+# Get combined table of binary significance patterns.
+
+all_P_tables_unfilt_col_count <- sapply(all_P_tables_unfilt, ncol)
+all_P_tables_unfilt_all_12 <- all_P_tables_unfilt[which(all_P_tables_unfilt_col_count == 13)]
+combined_sig_table_unfilt <- do.call("rbind", all_P_tables_unfilt_all_12)
+
+split_vec_unfilt <- c()
+for(dataset in names(all_P_tables_unfilt_all_12)) {
+  split_vec_unfilt <- c(split_vec_unfilt, rep(dataset, nrow(all_P_tables_unfilt_all_12[[dataset]])))
+}
+
+set.seed(131)
+random_row_i <- sample(1:nrow(combined_sig_table_unfilt), size=2000, replace=FALSE)
+
+combined_sig_table_unfilt_subset <- as.matrix(combined_sig_table_unfilt[random_row_i, ])
+
+col_rnorm = colorRamp2(c(0, 1), c("cornflowerblue", "white"))
+
+heatmaps_unfilt[["combined"]] <- Heatmap(matrix=t(combined_sig_table_unfilt_subset),
+                                  col=col_rnorm,
+                                  name="Combined Heatmap",
+                                  show_column_dend = FALSE,
+                                  show_column_names = FALSE,
+                                  #show_row_dend=FALSE,
+                                  #show_row_names=FALSE,
+                                  column_split=split_vec_unfilt[random_row_i],
+                                  #column_names_rot = 45,
+                                  #row_title_rot=0,
+                                  row_names_rot = 0,
+                                  column_title_rot=90,
+                                  #row_gap=unit(3, "mm"),
+                                  clustering_distance_rows="binary",
+                                  clustering_distance_columns="binary",
+                                  show_heatmap_legend=FALSE,
+                                  column_title_gp = gpar(fontsize=8),
+                                  height=unit(.5, "npc"))
+
+heatmaps_unfilt[["combined"]]
+
+```
+
+
+# Tool PCoAs and distance matrices {.tabset}
+
+## Filtered data
+
+```{r overlap_percent_filt, fig.height=6, fig.width=12, cache=TRUE}
+
+first_marker = TRUE
+
+for(dataset in names(all_P_tables_filt)) {
+
+  swapped_values <- all_P_tables_filt[[dataset]]
+  swapped_values[swapped_values == 0] <- 2
+  swapped_values[swapped_values == 1] <- 0
+  
+  if(first_marker) {
+    dataset_binary_dists <- dist(t(swapped_values), method = "binary")
+    first_marker <- FALSE
+  } else {
+    dataset_binary_dists <- dataset_binary_dists + dist(t(swapped_values), method = "binary")
+  }
+}
+
+dataset_binary_dists <- dataset_binary_dists / length(all_P_tables_filt)
+
+
+print(dataset_binary_dists)
+
+filt_pcoa <- pcoa(dataset_binary_dists, correction="none", rn=NULL)
+
+eig_percent <- round(filt_pcoa$values$Relative_eig * 100, 3)
+
+xlab_set <- paste("Axis 1 (", as.character(eig_percent[1]), "%)", sep="")
+ylab_set <- paste("Axis 2 (", as.character(eig_percent[2]), "%)", sep="")
+
+plot(filt_pcoa$vectors[, "Axis.1"], filt_pcoa$vectors[, "Axis.2"],
+     col="white", xlab = xlab_set, ylab=ylab_set) 
+text(filt_pcoa$vectors[, "Axis.1"], filt_pcoa$vectors[, "Axis.2"], labels = rownames(filt_pcoa$vectors))
+
+```
+
+
+## Unfiltered data
+
+```{r overlap_percent_unfilt, fig.height=6, fig.width=12, cache=TRUE}
+
+first_marker = TRUE
+
+for(dataset in names(all_P_tables_unfilt_all_12)) {
+
+  swapped_values <- all_P_tables_unfilt[[dataset]]
+  swapped_values[swapped_values == 0] <- 2
+  swapped_values[swapped_values == 1] <- 0
+  
+  if(first_marker) {
+    dataset_binary_dists <- dist(t(swapped_values), method = "binary")
+    first_marker <- FALSE
+  } else {
+    dataset_binary_dists <- dataset_binary_dists + dist(t(swapped_values), method = "binary")
+  }
+}
+
+dataset_binary_dists <- dataset_binary_dists / length(all_P_tables_unfilt)
+
+
+print(dataset_binary_dists)
+
+filt_pcoa <- pcoa(dataset_binary_dists, correction="none", rn=NULL)
+
+eig_percent <- round(filt_pcoa$values$Relative_eig * 100, 3)
+
+xlab_set <- paste("Axis 1 (", as.character(eig_percent[1]), "%)", sep="")
+ylab_set <- paste("Axis 2 (", as.character(eig_percent[2]), "%)", sep="")
+
+plot(filt_pcoa$vectors[, "Axis.1"], filt_pcoa$vectors[, "Axis.2"],
+     col="white", xlab = xlab_set, ylab=ylab_set) 
+text(filt_pcoa$vectors[, "Axis.1"], filt_pcoa$vectors[, "Axis.2"], labels = rownames(filt_pcoa$vectors))
+
+```
+
+
+# Session info
+R session information reported here for reproducibility.
+
+```{r session_info}
+sessionInfo()
+```
